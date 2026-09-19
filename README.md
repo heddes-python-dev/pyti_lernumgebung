@@ -119,6 +119,9 @@ Da der Editor Python-Code ausfuehrt, koennen auch `if`, `while`, Variablen und F
 ├── level.py             # Leveldefinitionen
 ├── requirements.txt     # Python-Abhaengigkeiten
 ├── VERSION              # Aktuelle Version
+├── CHANGELOG.md         # Versionshistorie
+├── ROADMAP.md           # Geplante Erweiterungen
+├── LICENSE              # MIT-Lizenz
 └── docs/
     └── ARCHITECTURE.md  # Technische Architektur
 ```
@@ -160,7 +163,8 @@ Die aktuelle Version steht in [VERSION](VERSION). Aenderungen werden in [CHANGEL
 
 ## Lizenz
 
-Vor einer Veroeffentlichung auf GitHub muss eine passende Lizenzdatei ergaenzt werden. Ohne Lizenz gelten standardmaessig die gesetzlichen Urheberrechte; andere duerfen den Code dann nicht automatisch veraendern oder weiterveroeffentlichen.
+Das Projekt steht unter der MIT-Lizenz. Die vollstaendige Lizenz steht in
+[LICENSE](LICENSE).
 
 ## GitHub-Check
 
@@ -171,6 +175,5 @@ python -m py_compile main.py commands.py playing_field.py pyti.py editor.py high
 QT_QPA_PLATFORM=offscreen timeout 2s python main.py
 ```
 
-Das Projekt benoetigt keine Datenbank und keinen Build-Schritt. Fuer einen
-oeffentlichen Upload sollte ausserdem eine Lizenz ausgewaehlt und als `LICENSE`
-Datei abgelegt werden.
+Das Projekt benoetigt keine Datenbank und keinen Build-Schritt. Die MIT-Lizenz
+ist bereits als `LICENSE`-Datei enthalten.
