@@ -11,6 +11,9 @@ from .admin_store import AdminStore
 from .app_controller import PytiController
 from .field_manager import SpielfeldManager
 from .level_generator import GRID_SIZE
+from .level_creator_dialog import LevelCreatorDialog
+from .custom_levels import EigeneLevelSpeicher
+from .level_catalog import register_custom_level
 from .levels import LEVELS
 from .robot import Pyti
 from .script_runtime import BefehlsInterpreter
@@ -27,7 +30,17 @@ def hauptprogramm():
         QStandardPaths.writableLocation(QStandardPaths.AppConfigLocation)
     ) / "admin.json"
     store = AdminStore(config_pfad)
-    settings, levels, scripts = store.load(LEVELS)
+    custom_store = EigeneLevelSpeicher(config_pfad.parent / "custom_levels.json")
+    custom_error = ""
+    try:
+        custom_levels = custom_store.laden()
+    except (OSError, ValueError, TypeError, KeyError) as error:
+        custom_levels = {}
+        custom_error = f"Eigene Level konnten nicht geladen werden: {error}"
+    defaults = {**LEVELS, **custom_levels}
+    settings, levels, scripts = store.load(defaults)
+    if custom_error:
+        store.load_error = "; ".join(filter(None, (store.load_error, custom_error)))
     widgets = baue_ui(basis_pfad, levels.keys())
     robot = Pyti(grid_size=GRID_SIZE)
     field = SpielfeldManager(grid_size=GRID_SIZE)
@@ -43,6 +56,17 @@ def hauptprogramm():
         lambda: AdminPanel(
             store, controller, controller.admin_settings,
             controller.admin_scripts, version, store.load_error
+        ).exec()
+    )
+    draft_path = config_pfad.parent / "level_creator_drafts.json"
+    widgets.creator_button.clicked.connect(
+        lambda: LevelCreatorDialog(
+            draft_path,
+            lambda name, level: register_custom_level(
+                controller.levels, widgets.level_liste, name, level, custom_store
+            ),
+            lambda: controller.levels.keys(),
+            widgets.window,
         ).exec()
     )
     widgets.spielfeld_view.setScene(field.scene)

@@ -33,6 +33,7 @@ class PytiWidgets:
     spielfeld_view: SpielfeldView
     beispiele_button: QPushButton
     admin_button: QPushButton
+    creator_button: QPushButton
 
 
 def lade_fenster(ui_pfad):
@@ -94,6 +95,9 @@ def baue_ui(basis_pfad, level_namen):
     admin = QPushButton("Administration", seitenleiste)
     admin.setToolTip("Systemstatus, Einstellungen und Level verwalten")
     sidebar.addWidget(admin)
+    creator = QPushButton("Eigenes Level erstellen", seitenleiste)
+    creator.setToolTip("Level grafisch entwerfen und als Python-Datei exportieren")
+    sidebar.addWidget(creator)
     start_layout = QHBoxLayout()
     if start_button is not None:
         start_layout.addWidget(start_button)
@@ -102,6 +106,8 @@ def baue_ui(basis_pfad, level_namen):
     start_layout.addWidget(stop)
     sidebar.addLayout(start_layout)
     status = QLabel("Bereit", seitenleiste)
+    status.setWordWrap(True)
+    status.setMinimumHeight(40)
     sidebar.addWidget(status)
 
     view = SpielfeldView(None, None, window)
@@ -119,7 +125,7 @@ def baue_ui(basis_pfad, level_namen):
     haupt_layout.addWidget(seitenleiste)
     return PytiWidgets(
         window, level_liste, editor, start_button, reset, stop, status,
-        mission, view, beispiele, admin,
+        mission, view, beispiele, admin, creator,
     )
 
 

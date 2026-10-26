@@ -35,6 +35,12 @@ ein lokales Admin-Panel, interaktive Spielfeldbearbeitung und Level-Neustart.
 - `pyti_app/field_rendering.py` zeichnet Raster, Wände, Pyti und Beeper.
 - `pyti_app/field_view.py` verarbeitet Linksklicks zum Bearbeiten von Beepern
   und Rechtsklicks zum Setzen und Entfernen von Wänden.
+- `pyti_app/level_creator_dialog.py` verwaltet den eigenständigen Creator;
+  `level_creator_view.py` verarbeitet Werkzeugklicks und
+  `level_creator_data.py` speichert validierte Entwürfe und erzeugt den
+  optionalen Python-Export. `custom_levels.py` persistiert registrierte
+  Level als validiertes JSON im Benutzer-Konfigurationsordner;
+  `level_catalog.py` ergänzt sie zur Laufzeit in der Levelauswahl.
 - `pyti_app/level_specs.py` speichert Missionsdaten; `level_generator.py`
   erzeugt Wandmuster und `levels.py` baut daraus die Levelsammlung.
 

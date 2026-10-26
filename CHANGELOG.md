@@ -2,6 +2,22 @@
 
 Alle bemerkenswerten Aenderungen dieses Projekts werden hier dokumentiert.
 
+## [1.3.0] - 2026-10-26
+
+### Hinzugefuegt
+
+- Grafischer Level-Creator mit mehreren lokal gespeicherten Entwürfen,
+  geprüfter Spielfeldbearbeitung, automatischer Levelregistrierung und
+  optionalem Python-Quelltextexport. Eigene Level werden ohne manuelle
+  Änderung an Python-Dateien sofort und dauerhaft in Pyti übernommen.
+- Skriptfehler mit Zeilennummer direkt in der Oberfläche anzeigen.
+
+### Verbessert
+
+- Admin-Systemcheck akzeptiert eigene Level zusätzlich zu den Standardleveln.
+- Benutzerhandbuch um Creator-Ablauf und automatische Levelregistrierung
+  ergänzt.
+
 ## [1.2.0] - 2026-10-26
 
 ### Hinzugefuegt

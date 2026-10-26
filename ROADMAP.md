@@ -34,10 +34,11 @@ sich diese nächsten Schritte:
   Oberfläche müssen sicher über Qt-Signale an den GUI-Thread übergeben werden.
   Das bereits vorhandene 30-Sekunden-Zeitlimit bleibt eine zusätzliche
   Absicherung, ersetzt aber weder responsive Bedienung noch einen Abbruchknopf.
-- [ ] **Verständliche Fehlerausgabe:** Syntax- und Laufzeitfehler mit
+- [x] **Verständliche Fehlerausgabe:** Syntax- und Laufzeitfehler mit
   Fehlertyp, Meldung und Zeilennummer in der Anwendung anzeigen,
   statt sie nur in der Konsole auszugeben. Zeitlimit und Stopp-Funktion sind
-  bereits umgesetzt; offen ist die verständliche Anzeige im Anwendungsfenster.
+  bereits umgesetzt; Fehlerdetails erscheinen in der Statusanzeige und im
+  Tooltip des Hauptfensters.
 - [ ] **Admin-Warnungen erneuern:** Ladefehler beim erneuten Einlesen einer
   gültigen oder nicht vorhandenen Konfiguration löschen und den Ablauf
   „fehlerhafte Datei, danach erfolgreicher Ladevorgang“ testen.
@@ -76,8 +77,9 @@ sich diese nächsten Schritte:
 
 ## Kreativ-Werkzeuge & Extras
 
-- [ ] **Level-Creator-Modus:** Eigene Level grafisch auf dem Spielfeld
-  erstellen und die passende Definition für `level.py` exportieren.
+- [x] **Level-Creator-Modus:** Eigene Level in einem separaten Dialog grafisch
+  erstellen, Entwürfe lokal speichern und geprüfte Level automatisch in die
+  Levelauswahl übernehmen; optional bleibt der Python-Quelltextexport.
 
 ## Auslieferung
 

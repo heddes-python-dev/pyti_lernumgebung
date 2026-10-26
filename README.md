@@ -1,6 +1,6 @@
 # Pyti Lernumgebung
 
-Aktuelle Version: **1.2.0**
+Aktuelle Version: **1.3.0**
 
 Eine lokale Lernumgebung fuer Python und algorithmisches Denken. In einer grafischen PySide6-Anwendung programmiert man den Roboter Pyti, navigiert durch ein 15x15-Spielfeld und loest Level mit Waenden und Beepern.
 
@@ -26,6 +26,8 @@ Das ausführliche Handbuch für Lernende und Administratoren gibt es als
 - Abwechselnd helle Felder, dezente Zielfeldmarkierung und besser erkennbare Spielobjekte
 - Responsive Oberflaeche mit grossem Editorbereich
 - Lokales Admin-Panel für Statusprüfungen, Einstellungen, Level und Beispielskripte
+- Grafischer Level-Creator mit lokal gespeicherten Entwürfen und automatischer
+  Übernahme in die Levelauswahl; Python-Quelltextexport zusätzlich verfügbar
 
 Die aktuelle [Logik- und Plausibilitätsprüfung](docs/LOGIKPRUEFUNG.md) fasst
 die Testergebnisse, bestätigten Befunde und priorisierten nächsten Schritte

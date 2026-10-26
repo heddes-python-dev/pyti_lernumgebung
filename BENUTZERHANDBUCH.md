@@ -516,6 +516,43 @@ Levelnamen und bietet keine Funktion zum Hinzufügen oder Löschen einer
 Levelmission. Die gespeicherten Änderungen überschreiben die Daten des
 entsprechenden bestehenden Levels in der lokalen Installation.
 
+### Neue Level mit dem Level-Creator erstellen
+
+Öffne im Hauptfenster **Eigenes Level erstellen**. Der eigenständige Dialog
+enthält eine Vorschau des 15×15-Spielfelds und speichert mehrere Entwürfe
+automatisch im lokalen Anwendungskonfigurationsordner. Name und Mission
+können im Dialog bearbeitet werden.
+
+Wähle das gewünschte Spielfeld-Werkzeug und bearbeite die Zellen:
+
+- **Wand:** Rechtsklick setzt oder entfernt eine Wand.
+- **Beeper:** Linksklick setzt oder entfernt einen normalen Beeper.
+- **Startpunkt:** Linksklick verschiebt Pyti. Eine Wandzelle ist nicht zulässig.
+- **Ziel:** Linksklick verschiebt das Zielfeld und stellt sicher, dass dort ein
+  Beeper liegt.
+- **Startblickrichtung:** Auswahl Norden, Osten, Süden oder Westen.
+
+Start- und Zielfeld können nicht mit einer Wand belegt werden; der Ziel-Beeper
+kann nicht versehentlich entfernt werden. Vor dem Export prüft die Anwendung
+Koordinaten, Objektüberschneidungen und die Erreichbarkeit des Ziels. Ist ein
+Level ungültig, wird der Export abgewiesen; passe dann die Wände oder Positionen
+an.
+
+Mit **Speichern & in Pyti übernehmen** wird das geprüfte Level automatisch
+im lokalen Anwendungskonfigurationsordner gespeichert und sofort in die
+Levelauswahl aufgenommen. Nach einem Neustart ist es weiterhin verfügbar;
+eine manuelle Änderung an `pyti_app/levels.py` ist nicht erforderlich.
+Eigene Level erhalten den Präfix `Eigenes Level:` und ändern keine
+Standardmissionen. Wird ein Level desselben Namens bereits verwendet, fragt
+Pyti vor dem Ersetzen nach einer Bestätigung.
+
+**Python-Datei exportieren** bleibt als optionale zusätzliche Funktion
+verfügbar, wenn du eine Leveldefinition als Quelltext weitergeben oder manuell
+in ein Projekt übernehmen möchtest. Der Quelltextexport allein registriert das
+Level nicht automatisch; dafür ist **Speichern & in Pyti übernehmen** gedacht.
+Bei einer beschädigten Entwurfsdatei zeigt der Creator einen Fehler an und
+überschreibt die vorhandene Datei nicht automatisch.
+
 Ein Arbeitsblatt pro Standardlevel, mit Start, Ziel, Wandzahl, berechnetem
 Mindestweg und Platz für eigene Planung, steht im
 [Levelatlas](BENUTZERHANDBUCH_LEVELATLAS.md). Die druckfertige PDF enthält
@@ -560,11 +597,13 @@ Python-Erweiterung kann sowohl den Stopp als auch das Zeitlimit verzögern.
 | Inventar ist leer | `dropBeeper()` ohne vorheriges Aufnehmen | `anyBeeperInBag()` prüfen. |
 | Endlosschleife | Bedingung ändert sich nie | Prüfe, ob die Schleife durch Bewegung oder eine Zustandsänderung enden kann; bei Bedarf Stopp drücken. |
 | Kein Zielerfolg | Ziel-Beeper nicht aufgenommen oder wieder abgelegt | Prüfe Position und Inventar, nicht nur den Skriptstatus. |
-| Skriptstatus ist allgemein | Einzelheiten erscheinen in der Konsole | Konsole öffnen und die dort ausgegebene Fehlermeldung prüfen. |
+| Fehler im Skript | Status zeigt Fehlertyp, Zeilennummer und Meldung | Prüfe die genannte Zeile und den Kontext davor; der vollständige Statustext bleibt zusätzlich als Tooltip verfügbar. |
 
 Der letzte Ausführungsfehler wird im Admin-Panel für die laufende Sitzung
-angezeigt. Die Anwendung führt kein dauerhaftes Fehlerprotokoll und zeigt
-Fehler derzeit nicht als vollständigen, interaktiven Debugger im Hauptfenster.
+angezeigt. Während der Ausführung zeigt das Hauptfenster bei einem Fehler
+Fehlertyp, Skriptzeile (wenn Python sie bereitstellt) und Meldung direkt in
+der Statusanzeige; der Tooltip enthält denselben Text. Die Anwendung führt
+kein dauerhaftes Fehlerprotokoll und bietet keinen interaktiven Debugger.
 
 ---
 

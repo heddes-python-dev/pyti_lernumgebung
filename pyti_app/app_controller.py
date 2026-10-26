@@ -55,6 +55,7 @@ class PytiController:
             widgets.spielfeld_view,
             widgets.beispiele_button,
             widgets.admin_button,
+            widgets.creator_button,
         ]
         if widgets.start_button is not None:
             self.controls.append(widgets.start_button)
@@ -91,6 +92,7 @@ class PytiController:
             widget.setEnabled(False)
         self.ui.stop_button.setEnabled(True)
         self.ui.status.setText("Skript läuft …")
+        self.ui.status.setToolTip("")
         self.worker = SkriptAusfuehrer(
             self.ui.editor.toPlainText(), self.interpreter, self.bridge
         )
@@ -127,8 +129,11 @@ class PytiController:
             self.ui.status.setText("Skript erfolgreich beendet.")
         elif cancelled:
             self.ui.status.setText("Skriptausführung abgebrochen.")
+            self.ui.status.setToolTip("")
         else:
-            self.ui.status.setText("Skript beendet. Details stehen in der Konsole.")
+            error = self.interpreter.last_execution_error
+            self.ui.status.setText(error or "Skript wurde mit einem Fehler beendet.")
+            self.ui.status.setToolTip(error)
         self.active = False
         self.ui.stop_button.setEnabled(False)
         for widget, enabled in self.previous_enabled:

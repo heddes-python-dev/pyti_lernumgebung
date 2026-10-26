@@ -3,6 +3,7 @@
 import sys
 import threading
 import time
+import traceback
 
 from .robot import PytiWandKollisionError
 
@@ -134,4 +135,16 @@ class BefehlsInterpreter:
         return False
 
     def _set_last_error(self, error):
-        self.last_execution_error = f"{type(error).__name__}: {error}"
+        line = getattr(error, "lineno", None)
+        if line is None:
+            frames = traceback.extract_tb(error.__traceback__)
+            line = next(
+                (frame.lineno for frame in reversed(frames)
+                 if frame.filename == "<pyti-script>"),
+                None,
+            )
+        location = f" (Zeile {line})" if line is not None else ""
+        message = getattr(error, "msg", str(error))
+        self.last_execution_error = (
+            f"{type(error).__name__}{location}: {message}"
+        )

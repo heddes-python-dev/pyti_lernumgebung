@@ -8,6 +8,7 @@ from .admin_store import AdminStore
 from .level_generator import GRID_SIZE
 from .robot import Pyti
 from .script_runtime import BefehlsInterpreter
+from .levels import LEVELS
 
 
 def pruefe_system(levels, widgets, interpreter, startup_error=""):
@@ -81,8 +82,9 @@ def _check_gameplay():
 
 
 def _check_levels(levels):
-    if len(levels) != 50:
-        raise ValueError(f"Erwartet werden 50 Level, gefunden: {len(levels)}.")
+    missing = set(LEVELS) - set(levels)
+    if missing:
+        raise ValueError(f"Standardlevel fehlen: {', '.join(sorted(missing))}.")
     for name, level in levels.items():
         AdminStore.validate_level(level)
         start = (level["start_x"], level["start_y"])
@@ -117,7 +119,7 @@ def _check_ui(widgets):
     required = (
         widgets.window, widgets.level_liste, widgets.editor,
         widgets.reset_button, widgets.stop_button, widgets.status,
-        widgets.spielfeld_view,
+        widgets.spielfeld_view, widgets.creator_button,
         widgets.admin_button,
     )
     if any(widget is None for widget in required):
