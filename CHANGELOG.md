@@ -2,6 +2,30 @@
 
 Alle bemerkenswerten Aenderungen dieses Projekts werden hier dokumentiert.
 
+## [1.2.0] - 2026-10-26
+
+### Hinzugefuegt
+
+- Admin-Panel mit Systemstatus, lokalen Einstellungen, Levelbearbeitung und
+  Verwaltung von Beispielskripten
+- Spielfeldbearbeitung mit Beeper per Linksklick und Waenden per Rechtsklick
+- Knopf zum Zuruecksetzen des ausgewaehlten Levels auf den Startzustand
+- Abbrechbare Skriptausfuehrung im Hintergrund mit Qt-Signalbruecke
+- Verhaltenstests fuer Spiellogik, Level, Editor, Mausbedienung, Admin-Panel
+  und Skriptworker
+- Ausfuehrliches druckbares Handbuch mit 50 Level-Arbeitsblaettern
+- Dokumentierte Logik- und Plausibilitaetspruefung mit priorisierten
+  naechsten Schritten
+
+### Verbessert
+
+- Anwendung in Module unter `pyti_app/` gegliedert; Root-Module bleiben als
+  Kompatibilitaetsimporte erhalten
+- Zeilennummern im Editor werden fuer alle sichtbaren Zeilen korrekt gezeichnet
+- Level-, Wand-, Beeper- und Inventarlogik durch Tests abgesichert
+- README, Architektur, Roadmap und Benutzerhandbuch an den Funktionsumfang
+  angepasst
+
 ## [1.1.0] - 2026-09-19
 
 ### Hinzugefuegt

@@ -4,6 +4,21 @@
 
 Diese Sammlung zeigt verschiedene Ansätze und Programmiermuster, um Pyti zu steuern – vom einfachen Skript bis hin zur objektorientierten Programmierung.
 
+## Beispiel: Zum Ziel-Beeper laufen
+
+Im ersten Level startet Pyti links und schaut nach Osten. Das Ziel liegt vier
+Felder weiter. Pyti laeuft bis zum Beeper und hebt ihn auf:
+
+```python
+while not onBeeper():
+    moveForward()
+
+pickBeeper()
+```
+
+Der Ziel-Beepper ist auf dem Spielfeld hell markiert. Pyti zeigt mit dem Pfeil
+auf dem Roboterkoerper seine Blickrichtung.
+
 ## 1. Grundlagen: Suchen und Sammeln
 
 Laufe so lange nach vorne, wie der Weg frei ist, und sammle jeden Beeper auf dem Weg ein:

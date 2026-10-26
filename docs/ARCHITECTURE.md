@@ -2,41 +2,52 @@
 
 ## Ueberblick
 
-Pyti ist eine kleine Desktop-Anwendung mit PySide6. `main.py` verbindet die UI mit dem Spielfeld, dem Roboter und dem Befehlsinterpreter. Die Anwendung arbeitet bewusst ohne Webserver und ohne externe Datenbank.
+Pyti ist eine Desktop-Anwendung mit PySide6. `main.py` ist der Einstiegspunkt;
+die Implementierung ist in kleine Module unter `pyti_app/` gegliedert. Jede
+Python-Datei bleibt unter 150 Zeilen. Die Anwendung arbeitet ohne Webserver
+und externe Datenbank.
 
 Der aktuelle Versionsstand steht in `VERSION`; die Release-Aenderungen werden
-im `CHANGELOG.md` gepflegt. Version 1.1.0 enthaelt die gestufte Levelsammlung,
-die Zielpruefung, das optionale Beispiele-Fenster und die Unterstuetzung von
-Pyti-Befehlen innerhalb eigener Klassen und Funktionen.
+im `CHANGELOG.md` gepflegt. Version 1.2.0 ergaenzt Version 1.1.0 um die
+Modularisierung, automatisierte Verhaltenstests, abbrechbare Skriptausfuehrung,
+ein lokales Admin-Panel, interaktive Spielfeldbearbeitung und Level-Neustart.
 
 ## Komponenten
 
-### `main.py`
+### Anwendung und Oberfläche
 
-- Erstellt die Qt-Anwendung.
-- Laedt `game_window.ui` ueber einen Pfad relativ zur Quelldatei.
-- Baut die responsive Hauptansicht aus Spielfeldspalte und Seitenleiste auf.
-- Verbindet Levelauswahl und Startbutton mit der Spiellogik.
+- `pyti_app/application.py` erstellt Qt-Objekte und verbindet Module.
+- `pyti_app/ui_builder.py` lädt `game_window.ui` und baut die Widgets.
+- `pyti_app/app_controller.py` steuert Levelwechsel, Level-Neustart, Start,
+  Stopp und UI-Status.
+- `pyti_app/admin_panel.py` bündelt lokale Statusprüfungen, Einstellungen,
+  Levelverwaltung und Beispielskripte.
+- `pyti_app/admin_store.py` validiert und speichert Admin-Daten als JSON im
+  Benutzer-Konfigurationsordner.
+- Die Root-Module `main.py`, `commands.py`, `playing_field.py`, `pyti.py`,
+  `level.py`, `editor.py` und `highlighter.py` erhalten kurze
+  Kompatibilitätsimporte.
 
-### `playing_field.py`
+### Spiellogik und Level
 
-- Verwaltet das 15x15-Raster.
-- Zeichnet Raster, Pyti, Waende und Beeper in einer `QGraphicsScene`.
-- Prueft Rand- und Wandkollisionen.
-- Verarbeitet Mausklicks zum Platzieren und Entfernen von Beepern.
+- `pyti_app/robot.py` enthält Bewegung, Blickrichtung und Beeper-Inventar.
+- `pyti_app/field_manager.py` verwaltet Weltzustand, Sensoren und Zielprüfung.
+- `pyti_app/field_rendering.py` zeichnet Raster, Wände, Pyti und Beeper.
+- `pyti_app/field_view.py` verarbeitet Linksklicks zum Bearbeiten von Beepern
+  und Rechtsklicks zum Setzen und Entfernen von Wänden.
+- `pyti_app/level_specs.py` speichert Missionsdaten; `level_generator.py`
+  erzeugt Wandmuster und `levels.py` baut daraus die Levelsammlung.
 
-### `pyti.py`
+### Skriptausführung und Editor
 
-- Enthaelt die Bewegungs- und Drehlogik.
-- Verwaltet die Blickrichtung und das Beeper-Inventar.
-- Loest bei Randkollisionen `PytiWandKollisionError` aus.
-
-### `commands.py`
-
-- Stellt die Lernbefehle im Skriptkontext bereit.
-- Aktualisiert die Darstellung nach jeder Aktion.
-- Gibt bei erfolgreicher Ausfuehrung `True`, bei Fehlern `False` zurueck.
-- Verwendet eine kurze Qt-Ereignisschleife zwischen Aktionen, damit Animationen sichtbar bleiben.
+- `pyti_app/script_runtime.py` registriert Pyti-Befehle und führt Lernskripte
+  mit einem Zeitlimit aus.
+- `pyti_app/script_worker.py` führt Skripte im `QThread` aus und leitet
+  Spielfeldzugriffe per Qt-Signal in den GUI-Thread.
+- `pyti_app/admin_checks.py` prüft Imports, Spiellogik, Level-Erreichbarkeit
+  und UI-Elemente ohne den aktuellen Spielzustand zu verändern.
+- `pyti_app/editor.py` und `highlighter.py` implementieren Editor und
+  Python-Syntax-Highlighting.
 
 ### `EXAMPLES.md`
 
@@ -44,9 +55,10 @@ Pyti-Befehlen innerhalb eigener Klassen und Funktionen.
 - Wird nur auf Nachfrage über den Button `Beispiele` in einem separaten Dialog angezeigt.
 - Der Dialog liest die Datei relativ zu `main.py`; fehlt die Datei, bleibt die Anwendung startfähig.
 
-### `level.py`
+### Leveldefinitionen
 
-Level werden als Python-Dictionary beschrieben. Ein Level besitzt Startposition,
+Level werden aus den Spezifikationen in `pyti_app/level_specs.py` erzeugt. Ein
+Level besitzt Startposition,
 Startblickrichtung, Wände, Ziel-Beeper, eine Mission und ein maschinenlesbares
 Ziel. Die Leveldatei erzeugt die Wandmuster so, dass ein Grundpfad zum Ziel frei
 bleibt und die Wandanzahl mit der Levelnummer wächst.
@@ -63,8 +75,8 @@ bleibt und die Wandanzahl mit der Levelnummer wächst.
 }
 ```
 
-Die Anwendung prüft nach erfolgreicher Skriptausführung, ob Pyti am Ziel steht
-und den Ziel-Beeper aufgenommen hat.
+Die Anwendung prüft nach erfolgreicher Skriptausführung, ob Pyti am Ziel steht,
+den Ziel-Beeper tatsächlich aufgenommen hat und ihn noch im Inventar trägt.
 
 Richtungen sind numerisch kodiert:
 
@@ -75,11 +87,14 @@ Richtungen sind numerisch kodiert:
 
 ## Layout
 
-Die UI-Datei liefert nur das Grundfenster mit Spielfeldplatzhalter und Startbutton. `main.py` ersetzt den Platzhalter durch `SpielfeldView` und erstellt die Seitenleiste programmatisch. Qt-Layouts sorgen dafuer, dass der Editor den verfuegbaren Platz erhaelt, ohne Hilfe, Levelauswahl oder Startbutton zu ueberdecken.
+Die UI-Datei liefert das Grundfenster. `pyti_app/ui_builder.py` setzt
+Spielfeldansicht und Seitenleiste programmatisch zusammen. Qt-Layouts sorgen
+dafuer, dass der Editor den verfuegbaren Platz erhaelt.
 
 ## Erweiterungspunkte
 
-- Neue Level in `level.py` ergaenzen.
-- Neue Pyti-Aktionen in `commands.py` registrieren.
-- Neue Sensoren in `commands.py` und `playing_field.py` implementieren.
+- Neue Level in `pyti_app/level_specs.py` ergaenzen.
+- Neue Pyti-Aktionen in `pyti_app/script_runtime.py` registrieren.
+- Neue Sensoren in `pyti_app/script_runtime.py` und
+  `pyti_app/field_manager.py` implementieren.
 - Eine sichere Ausfuehrungsumgebung fuer nicht vertrauenswuerdigen Code integrieren, falls Skripte aus externen Quellen akzeptiert werden sollen. Die aktuelle `exec()`-Ausfuehrung ist keine Sandbox.

@@ -1,8 +1,13 @@
 # Pyti Lernumgebung
 
-Aktuelle Version: **1.1.0**
+Aktuelle Version: **1.2.0**
 
 Eine lokale Lernumgebung fuer Python und algorithmisches Denken. In einer grafischen PySide6-Anwendung programmiert man den Roboter Pyti, navigiert durch ein 15x15-Spielfeld und loest Level mit Waenden und Beepern.
+
+Das ausführliche Handbuch für Lernende und Administratoren gibt es als
+[druckfertige PDF mit 50 Level-Arbeitsblättern](BENUTZERHANDBUCH_Pyti.pdf),
+[Markdown-Handbuch](BENUTZERHANDBUCH.md) und
+[Levelatlas-Quelldatei](BENUTZERHANDBUCH_LEVELATLAS.md).
 
 ## Funktionen
 
@@ -17,7 +22,14 @@ Eine lokale Lernumgebung fuer Python und algorithmisches Denken. In einer grafis
 - Beeper aufnehmen und ablegen
 - Sensorfunktionen fuer Bedingungen und Schleifen
 - Beeper koennen per Mausklick auf dem Spielfeld platziert oder entfernt werden
+- Waende per Rechtsklick setzen oder entfernen; den Level per Knopfdruck neu starten
+- Abwechselnd helle Felder, dezente Zielfeldmarkierung und besser erkennbare Spielobjekte
 - Responsive Oberflaeche mit grossem Editorbereich
+- Lokales Admin-Panel für Statusprüfungen, Einstellungen, Level und Beispielskripte
+
+Die aktuelle [Logik- und Plausibilitätsprüfung](docs/LOGIKPRUEFUNG.md) fasst
+die Testergebnisse, bestätigten Befunde und priorisierten nächsten Schritte
+zusammen. Die offene Planung steht in [ROADMAP.md](ROADMAP.md).
 
 ## Voraussetzungen
 
@@ -66,17 +78,23 @@ Das Programm laedt die UI-Datei relativ zu `main.py`. Es kann daher auch aus ein
 2. Schreibe ein Python-Skript in den Editor.
 3. Klicke auf `Start`.
 4. Beobachte Pyti auf dem Spielfeld.
-5. Platziere zusaetzliche Beeper bei Bedarf mit einem Mausklick auf ein Feld.
+5. Platziere zusaetzliche Beeper per Linksklick oder Waende per Rechtsklick.
+6. Mit `Level neu starten` setzt du Pyti und das Spielfeld auf den Anfang
+   des ausgewaehlten Levels zurueck.
 
 Beispiel:
 
 ```python
-while frontClear():
+while not onBeeper():
     moveForward()
 
-if onBeeper():
-    pickBeeper()
+pickBeeper()
 ```
+
+Im ersten Level laeuft Pyti damit bis zum markierten Zielfeld und sammelt den
+Beeper ein. Eine Vorschau des gestalteten Spielfelds ist hier zu sehen:
+
+![Vorschau des gestalteten Pyti-Spielfelds im Level „Eine Wand“](docs/spielbrett-vorschau.png)
 
 ## Verfuegbare Befehle
 
@@ -108,33 +126,58 @@ Da der Editor Python-Code ausfuehrt, koennen auch `if`, `while`, Variablen und F
 
 ```text
 .
-├── main.py              # Anwendungseinstieg und UI-Aufbau
-├── game_window.ui       # Qt-Grundfenster
-├── commands.py          # Pyti-Befehle und Skriptausfuehrung
-├── pyti.py              # Roboter, Bewegung und Beeper-Inventar
-├── playing_field.py     # Raster, Rendering, Level- und Sensorlogik
-├── editor.py            # Code-Editor mit Zeilennummern
-├── highlighter.py       # Python-Syntax-Highlighting
-├── EXAMPLES.md          # Beispielprogramme und Programmiermuster
-├── level.py             # Leveldefinitionen
-├── requirements.txt     # Python-Abhaengigkeiten
-├── VERSION              # Aktuelle Version
-├── CHANGELOG.md         # Versionshistorie
-├── ROADMAP.md           # Geplante Erweiterungen
-├── LICENSE              # MIT-Lizenz
+├── main.py                  # Kompatibler Anwendungseinstieg
+├── pyti_app/                # Anwendungsmodule (je Datei max. 150 Zeilen)
+│   ├── __main__.py          # Paketstart mit python -m pyti_app
+│   ├── application.py       # Qt-Start und Objektverdrahtung
+│   ├── app_controller.py    # Levelauswahl und Ausführungssteuerung
+│   ├── ui_builder.py        # Aufbau der Fenster-Widgets
+│   ├── robot.py             # Roboterbewegung und Inventar
+│   ├── field_manager.py     # Spielfeldzustand und Sensorlogik
+│   ├── field_rendering.py   # Zeichnen von Raster und Spielfiguren
+│   ├── field_view.py        # Mausklicks und Qt-Spielfeldansicht
+│   ├── script_runtime.py    # Pyti-Befehle und Skriptausführung
+│   ├── script_worker.py     # Worker-Thread und Qt-Signalbrücke
+│   ├── admin_panel.py       # Lokales Verwaltungsfenster
+│   ├── admin_checks.py     # Funktions- und Levelprüfungen
+│   ├── admin_store.py      # Lokale Konfiguration und Levelvalidierung
+│   ├── level_specs.py       # Quelldaten der Missionen
+│   ├── level_generator.py   # Level- und Wandgenerator
+│   ├── levels.py            # Erzeugte Levelsammlung
+│   ├── editor.py            # Code-Editor mit Zeilennummern
+│   └── highlighter.py       # Python-Syntax-Highlighting
+├── tests/                   # Verhaltenstests
+├── commands.py, pyti.py,    # Kompatible Importe für bisherige Einstiegspunkte
+│   playing_field.py, ...
+├── game_window.ui           # Qt-Grundfenster
+├── EXAMPLES.md              # Beispielprogramme und Programmiermuster
+├── requirements.txt         # Python-Abhaengigkeiten
+├── VERSION                  # Aktuelle Version
+├── CHANGELOG.md             # Versionshistorie
+├── ROADMAP.md               # Geplante Erweiterungen
+├── LICENSE                  # MIT-Lizenz
 └── docs/
-    └── ARCHITECTURE.md  # Technische Architektur
+    └── ARCHITECTURE.md      # Technische Architektur
 ```
 
 ## Tests und lokale Pruefung
 
-Automatisierte Verhaltenstests sind derzeit noch nicht enthalten. Die folgenden
-Befehle pruefen die Python-Syntax und den Start der Anwendung.
+Automatisierte Verhaltenstests pruefen Bewegung, Drehungen, Kollisionen,
+Sensoren, Beeper-Inventar, Zielprüfung und die Erreichbarkeit aller Level.
+Ein zusätzlicher Test stellt sicher, dass keine Python-Datei die Grenze von
+150 Zeilen überschreitet. Fuehre sie aus dem Projektverzeichnis aus:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+Die folgenden Befehle pruefen zusaetzlich die Python-Syntax und den Start der
+Anwendung.
 
 Syntaxpruefung:
 
 ```bash
-python -m py_compile main.py commands.py playing_field.py pyti.py editor.py highlighter.py level.py
+python -m compileall -q pyti_app tests *.py
 ```
 
 Headless-Start unter Linux:
@@ -142,6 +185,23 @@ Headless-Start unter Linux:
 ```bash
 QT_QPA_PLATFORM=offscreen python main.py
 ```
+
+## Administration
+
+Über `Administration` öffnet sich ein lokales Verwaltungsfenster. Es zeigt
+Prüfungen für die Spiellogik, Importe, die Erreichbarkeit aller Level, die
+Oberfläche, die gespeicherte Konfiguration und den letzten Skriptfehler.
+Außerdem lassen sich Zeitlimit und Aktionsgeschwindigkeit ändern, Level
+visuell bearbeiten sowie Beispielskripte speichern und in den Editor laden.
+Ungültige Leveländerungen, etwa ein unerreichbares Ziel, werden beim Speichern
+abgewiesen.
+
+Die Einstellungen werden im Benutzer-Konfigurationsordner der Plattform
+gespeichert und beim nächsten Start wieder geladen. Der Admin-Knopf hat
+absichtlich kein Passwort: Er ist für die Verwaltung der lokalen Installation
+gedacht und stellt keine Zugriffssicherung gegen andere Benutzer des Geräts
+dar. Skriptvorlagen können beliebigen Python-Code enthalten; auch sie sind
+nicht sandboxed.
 
 Fuer einen kurzen Smoke-Test kann der Prozess mit `timeout` beendet werden:
 
@@ -151,7 +211,24 @@ timeout 2s env QT_QPA_PLATFORM=offscreen python main.py
 
 ## Sicherheitswarnung
 
-Die Anwendung verwendet in `commands.py` `exec()`, damit Lernende normalen Python-Code mit den bereitgestellten Pyti-Befehlen schreiben koennen. Die Ausfuehrung erfolgt im Prozess der Anwendung und hat Zugriff auf die verfuegbaren Python-Builtins. Dadurch kann ein Skript grundsaetzlich auch Dateien lesen oder veraendern und Prozesse starten. Fuehre deshalb nur vollstaendig vertrauenswuerdige Skripte aus. Die Anwendung ist keine Sandbox fuer fremden oder nicht vertrauenswuerdigen Code.
+Die Anwendung verwendet in `pyti_app/script_runtime.py` `exec()`, damit
+Lernende normalen Python-Code mit den bereitgestellten Pyti-Befehlen schreiben
+koennen. Die Ausfuehrung erfolgt im Prozess der Anwendung und hat Zugriff auf
+die verfuegbaren Python-Builtins. Dadurch kann ein Skript grundsaetzlich auch
+Dateien lesen oder veraendern und Prozesse starten. Fuehre deshalb nur
+vollstaendig vertrauenswuerdige Skripte aus. Die Anwendung ist keine Sandbox
+fuer fremden oder nicht vertrauenswuerdigen Code.
+
+Skripte werden standardmäßig nach 30 Sekunden Python-Ausführungszeit
+abgebrochen. Das Zeitlimit lässt sich im Admin-Panel zwischen 1 und 300
+Sekunden einstellen. Es kann lang laufende Skripte beenden, unterbricht aber
+keine einzelne blockierende Operation innerhalb einer Python-Erweiterung.
+
+Die Skriptausfuehrung laeuft in einem Hintergrundthread. Pyti-Befehle werden
+ueber Qt-Signale im GUI-Thread ausgefuehrt; waehrenddessen kann die Anwendung
+weiter bedient werden. Mit `Stopp` lassen sich laufende Python-Schleifen
+abbrechen. Eine einzelne blockierende Operation innerhalb einer Python-
+Erweiterung kann auch dadurch nicht unterbrochen werden.
 
 ## Versionierung
 
@@ -171,7 +248,7 @@ Das Projekt steht unter der MIT-Lizenz. Die vollstaendige Lizenz steht in
 Vor dem ersten Push sollten diese lokalen Pruefungen erfolgreich sein:
 
 ```bash
-python -m py_compile main.py commands.py playing_field.py pyti.py editor.py highlighter.py level.py
+python -m compileall -q pyti_app tests *.py
 QT_QPA_PLATFORM=offscreen timeout 2s python main.py
 ```
 
