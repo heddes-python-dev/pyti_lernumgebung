@@ -2,7 +2,7 @@
 
 Aktuelle Version: **1.4.0**
 
-Eine lokale Lernumgebung fuer Python und algorithmisches Denken. In einer grafischen PySide6-Anwendung programmiert man den Roboter Pyti, navigiert durch ein 15x15-Spielfeld und loest Level mit Waenden und Beepern.
+Eine lokale Lernumgebung für Python und algorithmisches Denken. In einer grafischen PySide6-Anwendung programmiert man den Roboter Pyti, navigiert durch ein 15x15-Spielfeld und löst Level mit Wänden und Beepern.
 
 Das ausführliche Handbuch für Lernende und Administratoren gibt es als
 [druckfertige PDF mit 100 Level-Arbeitsblättern](BENUTZERHANDBUCH_Pyti.pdf),
@@ -19,7 +19,7 @@ Das ausführliche Handbuch für Lernende und Administratoren gibt es als
 - Editor mit Zeilennummern, Python-Syntax-Highlighting und Tab-Unterstuetzung
 - Optionales Beispiele-Fenster mit Inhalten aus `EXAMPLES.md`
 - Roboterbewegung mit sichtbarer Richtungsanzeige
-- Waende, Randkollisionen und Beeper
+- Wände, Randkollisionen und Beeper
 - Beeper aufnehmen und ablegen
 - `jump()` springt zwei Rasterfelder weit und nur über eine Wand; das
   Landefeld muss frei und innerhalb des Spielfelds liegen
@@ -40,7 +40,7 @@ zusammen. Die offene Planung steht in [ROADMAP.md](ROADMAP.md).
 
 - Python 3.10 oder neuer
 - PySide6
-- Ein Desktop-System mit Qt-Unterstuetzung
+- Ein Desktop-System mit Qt-Unterstützung
 
 ## Installation
 
@@ -62,7 +62,7 @@ Windows PowerShell:
 .venv\Scripts\Activate.ps1
 ```
 
-Abhaengigkeiten installieren:
+Abhängigkeiten installieren:
 
 ```bash
 python -m pip install --upgrade pip
@@ -75,11 +75,11 @@ python -m pip install -r requirements.txt
 python main.py
 ```
 
-Das Programm laedt die UI-Datei relativ zu `main.py`. Es kann daher auch aus einem anderen Arbeitsverzeichnis gestartet werden.
+Das Programm lädt die UI-Datei relativ zu `main.py`. Es kann daher auch aus einem anderen Arbeitsverzeichnis gestartet werden.
 
 ## Erste Schritte
 
-1. Waehle rechts ein Level aus.
+1. Wähle rechts ein Level aus.
 2. Schreibe ein Python-Skript in den Editor.
 3. Klicke auf `Start`.
 4. Beobachte Pyti auf dem Spielfeld.
@@ -117,7 +117,7 @@ Beeper ein. Eine Vorschau des gestalteten Spielfelds ist hier zu sehen:
 
 ### Sensoren
 
-| Sensor | Rueckgabe |
+| Sensor | Rückgabe |
 | --- | --- |
 | `onBeeper()` | `True`, wenn auf dem aktuellen Feld ein Beeper liegt |
 | `beeperAhead()` | `True`, wenn direkt vor Pyti ein Beeper liegt |
@@ -126,7 +126,7 @@ Beeper ein. Eine Vorschau des gestalteten Spielfelds ist hier zu sehen:
 | `rightClear()` | `True`, wenn das Feld rechts frei ist |
 | `anyBeeperInBag()` | `True`, wenn Pyti mindestens einen Beeper traegt |
 
-Da der Editor Python-Code ausfuehrt, koennen auch `if`, `while`, Variablen und Funktionen verwendet werden.
+Da der Editor Python-Code ausführt, können auch `if`, `while`, Variablen und Funktionen verwendet werden.
 
 ## Projektstruktur
 
@@ -238,7 +238,7 @@ Erweiterung kann auch dadurch nicht unterbrochen werden.
 
 ## Versionierung
 
-Die aktuelle Version steht in [VERSION](VERSION). Aenderungen werden in [CHANGELOG.md](CHANGELOG.md) dokumentiert. Das Projekt verwendet Semantic Versioning:
+Die aktuelle Version steht in [VERSION](VERSION). Änderungen werden in [CHANGELOG.md](CHANGELOG.md) dokumentiert. Das Projekt verwendet Semantic Versioning:
 
 - `MAJOR`: inkompatible Aenderungen
 - `MINOR`: neue abwaertskompatible Funktionen
@@ -258,5 +258,5 @@ python -m compileall -q pyti_app tests *.py
 QT_QPA_PLATFORM=offscreen timeout 2s python main.py
 ```
 
-Das Projekt benoetigt keine Datenbank und keinen Build-Schritt. Die MIT-Lizenz
+Das Projekt benötigt keine Datenbank und keinen Build-Schritt. Die MIT-Lizenz
 ist bereits als `LICENSE`-Datei enthalten.
