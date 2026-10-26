@@ -1,4 +1,4 @@
-"""Lesbare Quelldaten für die 50 Lernlevel."""
+"""Lesbare Quelldaten für die 100 Standardlevel."""
 
 LEVEL_SPECS = [
     ("Der erste Beeper", (0, 0), (4, 0), 0, "Gehe geradeaus und lerne moveForward()."),
@@ -18,7 +18,7 @@ LEVEL_SPECS = [
     ("Das Kreuz", (4, 4), (0, 0), 14, "Entkomme aus dem Kreuzungsbereich und erreiche den Beeper."),
     ("Doppelter Korridor", (0, 2), (11, 8), 15, "Navigiere durch zwei hintereinanderliegende Korridore."),
     ("Die Spirale", (1, 1), (10, 10), 16, "Folge dem spiralförmigen Wandmuster nach innen."),
-    ("Das Tor", (5, 12), (5, 1), 17, "Finde die einzige günstige Durchfahrt durch die Barriere."),
+    ("Das Tor", (5, 12), (5, 1), 17, "Finde eine günstige Durchfahrt durch die Barriere."),
     ("Wand-Slalom", (0, 10), (12, 4), 18, "Weiche den versetzten Wänden im Slalom aus."),
     ("Das L-Labyrinth", (1, 10), (12, 1), 19, "Umgehe zwei lange L-förmige Hindernisse."),
     ("Drei Kammern", (0, 0), (12, 8), 20, "Durchquere drei getrennte Wandbereiche."),
@@ -33,7 +33,7 @@ LEVEL_SPECS = [
     ("Die Ringmauer", (1, 7), (13, 7), 29, "Finde die Lücke in der Ringmauer."),
     ("Doppelschleuse", (0, 13), (13, 0), 30, "Passiere zwei Schleusen mit jeweils einer Öffnung."),
     ("Das Raster", (1, 1), (13, 13), 31, "Überquere das dichte Raster Schritt für Schritt."),
-    ("Labyrinth Bronze", (0, 0), (13, 9), 32, "Finde den einzigen langen Weg durch das Labyrinth."),
+    ("Labyrinth Bronze", (0, 0), (13, 9), 32, "Finde einen möglichst kurzen Weg durch das Labyrinth."),
     ("Labyrinth Silber", (2, 12), (12, 2), 34, "Nutze Sensoren, um Sackgassen zu erkennen."),
     ("Labyrinth Nord", (7, 13), (7, 0), 36, "Steige durch mehrere verschachtelte Korridore nach Norden."),
     ("Labyrinth Süd", (7, 0), (7, 13), 38, "Finde den Ausgang am anderen Ende des Labyrinths."),
@@ -52,3 +52,78 @@ LEVEL_SPECS = [
     ("Meisterlabyrinth", (14, 14), (0, 0), 64, "Löse das anspruchsvollste bisherige Labyrinth."),
     ("Das große Finale", (0, 0), (14, 14), 66, "Finde den Weg zum letzten Beeper und beende die Lernstrecke."),
 ]
+
+MAZE_MISSIONS = [
+    ("Der erste Sprung", "Springe über die blockierte Verbindung im Labyrinth."),
+    ("Sprung im Tunnel", "Nutze die Sprungstelle im schmalen Tunnel."),
+    ("Die versperrte Ecke", "Finde den Umweg durch das Ecklabyrinth."),
+    ("Kammerwechsel", "Verbinde die Kammern trotz blockierter Durchgänge."),
+    ("Sprungkreuzung", "Wähle an der Kreuzung den passenden Sprung."),
+    ("Der geheime Korridor", "Suche den versteckten Weg zwischen den Wänden."),
+    ("Doppelte Abzweigung", "Prüfe jeden Abzweig, bevor du springst."),
+    ("Der kurze Durchbruch", "Nutze den Sprung, ohne den Zielkorridor zu verfehlen."),
+    ("Wand im Weg", "Überwinde die Wand im begehbaren Abschnitt."),
+    ("Sprungprüfung Bronze", "Kombiniere Orientierung und Sprung im Labyrinth."),
+    ("Das verschachtelte Tor", "Finde den Weg durch die ineinanderliegenden Gänge."),
+    ("Das blockierte Tor", "Finde den Weg durch den blockierten Durchgang."),
+    ("Korridorwechsel", "Wechsle sicher zwischen den schmalen Korridoren."),
+    ("Die stille Kammer", "Finde die Verbindung aus der abgeschlossenen Kammer."),
+    ("Sprungfolge", "Plane den Sprung, ohne die Orientierung zu verlieren."),
+    ("Drei Wege", "Prüfe Sackgassen und wähle den passenden Durchgang."),
+    ("Das versetzte Tor", "Nutze versetzte Sprungstellen im Labyrinth."),
+    ("Die inneren Gänge", "Finde den Zugang zu den inneren Gängen."),
+    ("Kreuz und Quer", "Verbinde die getrennten Bereiche mit gezielten Sprüngen."),
+    ("Sprungprüfung Silber", "Löse das größere Labyrinth mit Sensoren und Sprüngen."),
+    ("Die Kammerreihe", "Durchquere mehrere hintereinanderliegende Kammern."),
+    ("Der lange Umweg", "Vergleiche Abzweigungen und halte den Zielkurs."),
+    ("Das doppelte Raster", "Orientiere dich im dicht verzweigten Raster."),
+    ("Verlorener Durchgang", "Finde den Durchgang zwischen den verschlossenen Gängen."),
+    ("Der versiegelte Durchgang", "Finde den richtigen Sprung aus dem verschlungenen Gang."),
+    ("Sprungnetz", "Nutze Sensoren, um Sprung und Richtungswechsel zu planen."),
+    ("Der verschachtelte Irrgarten", "Finde aus den eng verzweigten Gängen zurück zum Ziel."),
+    ("Kammerlabyrinth", "Durchquere die verzweigten Bereiche trotz blockierter Türen."),
+    ("Die falsche Fährte", "Lass dich von Sackgassen nicht vom Ziel abbringen."),
+    ("Sprungprüfung Gold", "Kombiniere längere Planung mit mehreren Sprüngen."),
+    ("Die verschlungenen Gänge", "Folge den verwinkelten Korridoren bis zum Ziel."),
+    ("Der verzweigte Pfad", "Finde das Ziel in den verzweigten Gängen."),
+    ("Sprünge im Raster", "Unterscheide offene Korridore von blockierten Übergängen."),
+    ("Die äußeren Gänge", "Durchlaufe die äußeren Korridore und finde den Zielweg."),
+    ("Kreuzung der Kammern", "Wähle an jeder Kammerkreuzung einen sicheren Weg."),
+    ("Das lange Tor", "Überwinde die Sprungstellen entlang des langen Korridors."),
+    ("Der Irrgartenkern", "Finde den Weg durch die dicht verschachtelten Bereiche."),
+    ("Verschachtelte Zonen", "Plane eine Route durch die ineinanderliegenden Labyrinthzonen."),
+    ("Die letzte Abzweigung", "Prüfe die letzten Alternativen vor dem Ziel."),
+    ("Sprungprüfung Diamant", "Löse das komplexe Raster mit einer durchdachten Sprungfolge."),
+    ("Das große Sprunglabyrinth", "Nutze alle erlernten Strategien im großen Labyrinth."),
+    ("Kammern ohne Karte", "Orientiere dich Schritt für Schritt durch unbekannte Kammern."),
+    ("Der versperrte Zielweg", "Finde den Zielweg über mehrere Sprungübergänge."),
+    ("Der lange Irrgarten", "Vermeide Sackgassen und plane die gesamte Route."),
+    ("Sprungfolge Meister", "Kombiniere Sensoren, Schleifen und präzise Sprünge."),
+    ("Das letzte Netz", "Finde im verzweigten Netz die Verbindung zum Ziel."),
+    ("Meisterlabyrinth Nord", "Löse das große Nordlabyrinth mit mehreren Sprungbarrieren."),
+    ("Meisterlabyrinth Süd", "Durchquere die verschachtelten Südkorridore."),
+    ("Die finale Prüfung", "Setze Sensoren, Schleifen und Sprünge gezielt zusammen."),
+    ("Das große Finale", "Bewältige das größte Labyrinth und erreiche den Ziel-Beeper."),
+]
+
+
+def level_nummer(index):
+    if index == 100:
+        return "1.0.0"
+    if index < 10:
+        return f"0.0.{index}"
+    minor, patch = divmod(index - 10, 10)
+    return f"0.{minor + 1}.{patch}"
+
+
+def maze_level_specs():
+    specs = []
+    for index, (name, mission) in enumerate(MAZE_MISSIONS):
+        stage, progress = divmod(index, 10)
+        size = (4, 4, 4, 5, 5)[stage]
+        jumps = (1, 1 + progress // 5, 2 + progress // 3,
+                 4 + progress // 2, 6 + progress // 2)[stage]
+        barrier = "Sprungbarriere" if jumps == 1 else "Sprungbarrieren"
+        mission = f"{mission} Überwinde {jumps} {barrier} mit jump()."
+        specs.append((name, size, jumps, mission))
+    return specs

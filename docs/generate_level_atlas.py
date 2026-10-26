@@ -1,13 +1,12 @@
 """Generate a printable, verified workbook page for each shipped level."""
 
 import sys
-from collections import deque
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from pyti_app.level_generator import GRID_SIZE
 from pyti_app.levels import LEVELS
+from level_atlas_routes import route_facts
 
 FOCI = (
     (5, "Anweisungsfolge und erste Drehungen"),
@@ -15,47 +14,30 @@ FOCI = (
     (25, "Planen, Schleifen und systematisches Prüfen"),
     (35, "Korridore, Kreuzungen und Fehlerbehandlung"),
     (50, "Komplexe Wege, robuste Schleifen und eigener Lösungsplan"),
+    (60, "Erste Sprünge und kleine Labyrinthe"),
+    (70, "Mehrere Sprungstellen und verschachtelte Korridore"),
+    (80, "Komplexe Kammerlabyrinthe und Sensorplanung"),
+    (90, "Dichte Labyrinthe und lange Sprungfolgen"),
+    (100, "Meisterlabyrinthe mit Schleifen, Sensoren und Sprüngen"),
 )
 
-
-def route_facts(start, goal, walls):
-    distances = {start: 0}
-    routes = {start: 1}
-    queue = deque([start])
-    while queue:
-        point = queue.popleft()
-        x, y = point
-        for neighbor in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
-            if (
-                not 0 <= neighbor[0] < GRID_SIZE
-                or not 0 <= neighbor[1] < GRID_SIZE
-                or neighbor in walls
-            ):
-                continue
-            candidate = distances[point] + 1
-            if neighbor not in distances:
-                distances[neighbor] = candidate
-                routes[neighbor] = routes[point]
-                queue.append(neighbor)
-            elif distances[neighbor] == candidate:
-                routes[neighbor] += routes[point]
-    return distances.get(goal), routes.get(goal, 0)
 
 def render():
     lines = [
         "# Anhang A – Levelkarten und Arbeitsheft",
         "",
-        "Diese 50 Arbeitsblätter beziehen sich auf die mitgelieferte Levelsammlung.",
+        "Diese 100 Arbeitsblätter beziehen sich auf die Standardlevel.",
         "Koordinaten und Wandzahlen stammen aus den Leveldaten; Mindestwege sind",
-        "per Breitensuche auf dem Raster berechnet und zählen nur Bewegungen,",
-        "nicht Drehbefehle. Die Anzahl der kürzesten Wege zählt alternative",
-        "Bewegungsrouten mit derselben Schrittzahl. Sie ist keine Anzahl aller",
-        "möglichen Skripte. Jede Karte ist als eigenständige Druckseite gedacht.",
+        "per Breitensuche auf dem Raster berechnet. Ein Schritt ist entweder",
+        "Gehen oder ein Sprung über genau ein Feld; Drehungen zählen nicht.",
+        "Ein Sprung ist nur über eine Wand möglich und landet auf einem freien Feld.",
+        "Die Zahl kürzester Wege zählt alternative Aktionsrouten, nicht Skripte.",
+        "Sie zählt keine Anzahl aller möglichen Programme. Jede Karte ist",
+        "eine eigene Druckseite.",
         "",
     ]
     for number, (name, level) in enumerate(LEVELS.items(), 1):
-        if number > 1:
-            lines.extend(["", r"\newpage", ""])
+        lines.extend(["", r"\newpage", ""])
         start = level["start_x"], level["start_y"]
         goal = tuple(level["goal"]["position"])
         shortest, routes = route_facts(start, goal, set(map(tuple, level["waende"])))
@@ -72,8 +54,8 @@ def render():
             f"| Startblickrichtung | {('Norden', 'Osten', 'Süden', 'Westen')[level['start_richtung']]} |",
             f"| Ziel | `{goal}` |",
             f"| Wände | {len(level['waende'])} |",
-            f"| Kürzester Rasterweg | {shortest} Bewegungen |",
-            f"| Kürzeste Bewegungsrouten | {routes} |",
+            f"| Kürzester Weg (Gehen/Springen) | {shortest} Aktionen |",
+            f"| Kürzeste Aktionsrouten | {routes} |",
             "",
             f"**Lernfokus:** {focus}.",
             "",

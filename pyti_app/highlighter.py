@@ -20,7 +20,7 @@ class PythonHighlighter(QSyntaxHighlighter):
         command_format.setForeground(QColor("#800080"))
         command_format.setFontWeight(QFont.Bold)
         commands = (
-            "moveForward", "turnLeft", "turnRight", "turnAround",
+            "moveForward", "turnLeft", "turnRight", "turnAround", "jump",
             "pickBeeper", "dropBeeper", "onBeeper", "beeperAhead",
             "frontClear", "leftClear", "rightClear", "anyBeeperInBag",
         )

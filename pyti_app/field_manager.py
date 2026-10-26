@@ -109,6 +109,17 @@ class SpielfeldManager:
             and ziel not in self.wand_koordinaten
         )
 
+    def ist_sprung_frei(self, roboter):
+        dx, dy = ((0, -2), (2, 0), (0, 2), (-2, 0))[roboter.richtung]
+        zwischen = roboter.x + dx // 2, roboter.y + dy // 2
+        ziel = roboter.x + dx, roboter.y + dy
+        return (
+            zwischen in self.wand_koordinaten
+            and 0 <= ziel[0] < self.grid_size
+            and 0 <= ziel[1] < self.grid_size
+            and ziel not in self.wand_koordinaten
+        )
+
     def beeper_voraus_pruefen(self, roboter):
         if not self.ist_weg_frei(roboter):
             return False

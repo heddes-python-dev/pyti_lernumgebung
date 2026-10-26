@@ -52,8 +52,27 @@ class AdminPanelTests(unittest.TestCase):
             store = AdminStore(path)
             settings, levels, _scripts = store.load(LEVELS)
             self.assertEqual(settings["max_execution_time"], 30)
-            self.assertEqual(len(levels), 50)
+            self.assertEqual(len(levels), 100)
             self.assertIn("nicht geladen", store.load_error)
+
+    def test_ladefehler_verschwindet_nach_gueltigem_oder_fehlendem_config(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "admin.json"
+            store = AdminStore(path)
+            path.write_text("{kaputt", encoding="utf-8")
+            store.load(LEVELS)
+            self.assertTrue(store.load_error)
+            settings, levels, scripts = store.load(LEVELS)
+            store.save(settings, levels, scripts)
+            store.load(LEVELS)
+            self.assertEqual(store.load_error, "")
+
+            path.write_text("{kaputt", encoding="utf-8")
+            store.load(LEVELS)
+            self.assertTrue(store.load_error)
+            path.unlink()
+            store.load(LEVELS)
+            self.assertEqual(store.load_error, "")
 
     def test_beispielvorlagen_koennen_geloescht_und_ausgewaehlt_werden(self):
         tab = ScriptsTab([

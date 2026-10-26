@@ -1,25 +1,28 @@
 # Pyti Lernumgebung
 
-Aktuelle Version: **1.3.0**
+Aktuelle Version: **1.4.0**
 
 Eine lokale Lernumgebung fuer Python und algorithmisches Denken. In einer grafischen PySide6-Anwendung programmiert man den Roboter Pyti, navigiert durch ein 15x15-Spielfeld und loest Level mit Waenden und Beepern.
 
 Das ausführliche Handbuch für Lernende und Administratoren gibt es als
-[druckfertige PDF mit 50 Level-Arbeitsblättern](BENUTZERHANDBUCH_Pyti.pdf),
+[druckfertige PDF mit 100 Level-Arbeitsblättern](BENUTZERHANDBUCH_Pyti.pdf),
 [Markdown-Handbuch](BENUTZERHANDBUCH.md) und
 [Levelatlas-Quelldatei](BENUTZERHANDBUCH_LEVELATLAS.md).
 
 ## Funktionen
 
 - Interaktives 15x15-Spielfeld
-- 50 vorgefertigte Level mit Missionen
-- Ansteigender Schwierigkeitsgrad von Einzelwänden bis zum Labyrinth
+- 100 vorgefertigte Level von `0.0.1` bis `1.0.0` mit Missionszielen
+- Ansteigender Schwierigkeitsgrad von ersten Bewegungen bis zu komplexen
+  Sprung- und Meisterlabyrinthen
 - Automatische Prüfung, ob der Ziel-Beeper aufgenommen wurde
 - Editor mit Zeilennummern, Python-Syntax-Highlighting und Tab-Unterstuetzung
 - Optionales Beispiele-Fenster mit Inhalten aus `EXAMPLES.md`
 - Roboterbewegung mit sichtbarer Richtungsanzeige
 - Waende, Randkollisionen und Beeper
 - Beeper aufnehmen und ablegen
+- `jump()` springt zwei Rasterfelder weit und nur über eine Wand; das
+  Landefeld muss frei und innerhalb des Spielfelds liegen
 - Sensorfunktionen fuer Bedingungen und Schleifen
 - Beeper koennen per Mausklick auf dem Spielfeld platziert oder entfernt werden
 - Waende per Rechtsklick setzen oder entfernen; den Level per Knopfdruck neu starten
@@ -110,6 +113,7 @@ Beeper ein. Eine Vorschau des gestalteten Spielfelds ist hier zu sehen:
 | `turnAround()` | 180 Grad drehen |
 | `pickBeeper()` | Beeper vom aktuellen Feld aufnehmen |
 | `dropBeeper()` | Einen Beeper aus dem Inventar ablegen |
+| `jump()` | Genau eine Wand überspringen und zwei Rasterfelder weiter auf einem freien Feld landen |
 
 ### Sensoren
 

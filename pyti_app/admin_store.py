@@ -1,12 +1,13 @@
 """Loads and saves local admin settings, level overrides, and script templates."""
 
 import json
-from collections import deque
 from copy import deepcopy
 from pathlib import Path
 
 from .admin_script_data import DEFAULT_SCRIPTS, validate_scripts
 from .level_generator import GRID_SIZE
+from .level_paths import level_reachable
+from .level_specs import LEVEL_SPECS, level_nummer
 
 DEFAULT_SETTINGS = {"max_execution_time": 30, "action_delay_ms": 200}
 
@@ -17,6 +18,7 @@ class AdminStore:
         self.load_error = ""
 
     def load(self, default_levels):
+        self.load_error = ""
         levels = deepcopy(default_levels)
         scripts = deepcopy(DEFAULT_SCRIPTS)
         settings = dict(DEFAULT_SETTINGS)
@@ -65,11 +67,29 @@ class AdminStore:
             raise ValueError("Leveldaten müssen als Objekt gespeichert sein.")
         levels = deepcopy(defaults)
         for name, values in overrides.items():
+            if name not in levels:
+                name = AdminStore._migrate_level_name(name, levels)
             if name not in levels or not isinstance(values, dict):
                 raise ValueError(f"Unbekannter oder ungültiger Level: {name}")
             levels[name].update(values)
             AdminStore.validate_level(levels[name])
         return levels
+
+    @staticmethod
+    def _migrate_level_name(name, levels):
+        prefix, _, title = name.partition(" ")
+        parts = prefix.split(".")
+        if len(parts) == 3 and parts[:2] == ["0", "0"] and parts[2].isdigit():
+            index = int(parts[2])
+            if 1 <= index <= len(LEVEL_SPECS):
+                target = f"{level_nummer(index)} {LEVEL_SPECS[index - 1][0]}"
+                if target in levels and title == LEVEL_SPECS[index - 1][0]:
+                    return target
+        matches = [
+            candidate for candidate in levels
+            if candidate.split(" ", 1)[-1] == title
+        ]
+        return matches[0] if len(matches) == 1 else name
 
     @staticmethod
     def validate_level(level):
@@ -101,21 +121,7 @@ class AdminStore:
 
     @staticmethod
     def _reachable(start, goal, walls):
-        visited = {start}
-        queue = deque([start])
-        while queue:
-            x, y = queue.popleft()
-            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                point = x + dx, y + dy
-                if (
-                    0 <= point[0] < GRID_SIZE and 0 <= point[1] < GRID_SIZE
-                    and point not in walls and point not in visited
-                ):
-                    if point == goal:
-                        return True
-                    visited.add(point)
-                    queue.append(point)
-        return start == goal
+        return level_reachable(start, goal, walls)
 
     @staticmethod
     def _coordinates(value, label):

@@ -2,6 +2,25 @@
 
 Alle bemerkenswerten Aenderungen dieses Projekts werden hier dokumentiert.
 
+## [1.4.0] - 2026-10-26
+
+### Hinzugefuegt
+
+- Standardlevel von 50 auf 100 erweitert; die Levelnummerierung reicht
+  gestuft von `0.0.1` bis `1.0.0`.
+- Neue Sprungaktion `jump()`, die genau eine Wand überwindet, und zunehmend
+  komplexe, reproduzierbar erzeugte Labyrinthe mit Sprungbarrieren.
+- Druckbares A4-Handbuch mit 100 Level-Arbeitsblättern.
+
+### Verbessert
+
+- Sprünge sind nur über eine Wand auf ein freies Landefeld möglich; die
+  Erreichbarkeitsprüfung, Admin-Prüfungen und Labyrinthgenerierung verwenden
+  dieselbe Regel.
+- Alle Standardlevel werden automatisiert mit echten Pyti-Befehlen über den
+  Interpreter gelöst und auf das Erreichen des Ziels geprüft.
+- Dokumentation und Logikprüfung an den Umfang von 100 Leveln angepasst.
+
 ## [1.3.0] - 2026-10-26
 
 ### Hinzugefuegt

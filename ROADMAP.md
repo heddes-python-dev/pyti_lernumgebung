@@ -10,17 +10,9 @@ Der geprüfte Stand und die Belege sind in
 [docs/LOGIKPRUEFUNG.md](docs/LOGIKPRUEFUNG.md) dokumentiert. Daraus ergeben
 sich diese nächsten Schritte:
 
-1. **P1:** Skriptfehler mit Typ, Meldung und Zeilennummer direkt in der
-   Anwendung anzeigen.
-2. **P1:** Eindeutigkeitsversprechen der Level-Missionen mit den tatsächlichen
-   Levelwegen abgleichen.
-3. **P2:** Veraltete Admin-Konfigurationswarnungen bei erneutem Einlesen
-   zurücksetzen und regressionsprüfen.
-4. **P2:** Den Interpreter-Lösungsdurchlauf für alle Level als dauerhaften
-   Test ergänzen.
-5. **P2/P3:** Fortschritt, Editorzustand, Geschwindigkeit und
+1. **P2/P3:** Fortschritt, Editorzustand, Geschwindigkeit und
    Installations-Smoke-Tests in der nachfolgenden Reihenfolge umsetzen.
-6. **Bedingt:** Skriptisolation nur vorsehen, wenn nicht vertrauenswürdiger
+2. **Bedingt:** Skriptisolation nur vorsehen, wenn nicht vertrauenswürdiger
    Code ausgeführt werden soll.
 
 ## Zuverlässigkeit & Ausführung
@@ -39,15 +31,16 @@ sich diese nächsten Schritte:
   statt sie nur in der Konsole auszugeben. Zeitlimit und Stopp-Funktion sind
   bereits umgesetzt; Fehlerdetails erscheinen in der Statusanzeige und im
   Tooltip des Hauptfensters.
-- [ ] **Admin-Warnungen erneuern:** Ladefehler beim erneuten Einlesen einer
+- [x] **Admin-Warnungen erneuern:** Ladefehler beim erneuten Einlesen einer
   gültigen oder nicht vorhandenen Konfiguration löschen und den Ablauf
   „fehlerhafte Datei, danach erfolgreicher Ladevorgang“ testen.
-- [ ] **Level-Missionen plausibilisieren:** Eindeutigkeitsversprechen in
-  Missionstexten anhand eines ausdrücklich definierten Kriteriums prüfen und
-  entweder Formulierungen oder Levelgeometrie anpassen.
-- [ ] **Level im Interpreter regressionsprüfen:** Für jedes Standardlevel eine
-  gültige Lösung mit tatsächlichen Pyti-Befehlen ausführen und das Erreichen
-  des Ziels prüfen; der aktuelle Audit-Lauf ist noch kein dauerhafter Test.
+- [x] **Level-Missionen plausibilisieren:** Einzigartigkeitsversprechen gelten
+  nur bei genau einer kürzesten Bewegungsroute auf dem Raster. Der Regressionstest
+  prüft alle 100 Standardlevel und sichert entsprechende Missionstexte ab.
+- [x] **Level im Interpreter regressionsprüfen:** Für jedes der 100
+  Standardlevel eine kürzeste Route ermitteln, daraus ein Python-Skript mit
+  echten Pyti-Befehlen erzeugen, es durch den Interpreter ausführen und das
+  Erreichen des Ziel-Beepers prüfen.
 
 ## Gameplay & Motivation
 

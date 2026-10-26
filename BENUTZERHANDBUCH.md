@@ -4,7 +4,7 @@
 
 **Für Lernende, Lehrkräfte und Administratoren**<br>
 **Dokumentversion:** 1.0<br>
-**Anwendungsversion:** 1.2.0<br>
+**Anwendungsversion:** 1.4.0<br>
 **Stand:** 25. Oktober 2026
 
 ---
@@ -244,6 +244,9 @@ Wände als auch den Rand.
 
 Versucht ein Skript trotzdem, in eine Wand oder über den Rand zu gehen, wird
 die Bewegung als Fehler abgebrochen. Verwende Sensoren vor riskanten Schritten.
+Mit `jump()` kann Pyti genau eine Wand überspringen und landet zwei
+Rasterfelder weiter. Der Sprung funktioniert nur, wenn das Zwischenfeld eine
+Wand und das Landefeld frei und innerhalb des Spielfelds ist.
 
 ## Beeper und Inventar
 
@@ -287,6 +290,7 @@ wird.
 | `turnAround()` | Dreht Pyti um 180 Grad. |
 | `pickBeeper()` | Hebt einen Beeper vom aktuellen Feld auf. Ohne Beeper entsteht ein Fehler. |
 | `dropBeeper()` | Legt einen Beeper auf das aktuelle Feld. Mit leerem Inventar entsteht ein Fehler. |
+| `jump()` | Springt genau eine Wand weit und landet zwei Felder vorwärts. Das Zwischenfeld muss eine Wand, das Landefeld frei und innerhalb des Spielfelds sein. |
 
 ## Sensoren
 
@@ -474,16 +478,20 @@ Lernziel: Methoden, Attribute, Objekte und `self` kennenlernen.
 
 ## Umfang
 
-Die Anwendung enthält **50 vorgefertigte Level**. Sie sind als fortlaufende
+Die Anwendung enthält **100 vorgefertigte Level**. Die Levelnummern laufen
+in einer gestuften Folge von `0.0.1` bis `1.0.0`. Die Level sind als fortlaufende
 Missionen angeordnet und variieren Startposition, Ziel, Wandanzahl und
-Wandmuster. In der aktuellen Sammlung gibt es 50 unterschiedliche
-Wandlayouts und 11 Generatorstufen.
+Wandmuster. Die späteren Missionen enthalten reproduzierbar erzeugte
+Labyrinthe; zunehmend müssen blockierte Verbindungen mit `jump()` überwunden
+werden.
 
 Die Level wurden automatisiert auf Koordinatengültigkeit und
-Ziel-Erreichbarkeit geprüft. Erreichbarkeit bedeutet, dass es mindestens einen
-Weg durch freie Felder gibt. Sie bedeutet nicht, dass jedes Level genau einen
-Weg hat oder dass die Mission nur auf eine bestimmte Weise gelöst werden
-kann.
+Ziel-Erreichbarkeit geprüft. Erreichbarkeit berücksichtigt Gehen und
+`jump()`-Sprünge über genau eine Wand auf ein freies Landefeld. Sie bedeutet
+nicht, dass jedes Level genau einen Weg hat oder dass die Mission nur auf eine
+bestimmte Weise gelöst werden kann. Kürzeste Wege zählen Bewegungsaktionen:
+Gehen oder `jump()`; Drehungen und unterschiedliche Python-Programme werden
+nicht als eigene Routen gezählt.
 
 ## Eigene Lernprogression
 
@@ -630,7 +638,7 @@ Selbstprüfungen.
 |---|---|
 | Module | Ob ausgewählte zentrale Anwendungsmodule importierbar sind. |
 | Spiellogik | Sensoren, Bewegung, Beeper-Inventar und Zielprüfung in einem kleinen isolierten Testfeld. |
-| Level | Ob 50 Level vorliegen, Werte gültig sind und Ziele ohne Wandblockade erreichbar sind. |
+| Level | Ob alle 100 Standardlevel vorliegen, Werte gültig sind und Ziele mit Gehen oder Springen erreichbar sind. |
 | Oberfläche | Ob zentrale Widgets einschließlich Admin-Knopf vorhanden sind. |
 | Konfiguration | Ob beim Programmstart eine fehlerhafte Admin-Datei festgestellt wurde. |
 | Letzter Skriptfehler | Der letzte aufgezeichnete Skriptfehler dieser Sitzung oder der Hinweis, dass keiner vorliegt. |
@@ -1060,7 +1068,7 @@ CHANGELOG.md              Versionsänderungen
 VERSION                   Versionsnummer
 requirements.txt          Python-Abhängigkeiten
 docs/ARCHITECTURE.md      Kurze technische Architekturübersicht
-BENUTZERHANDBUCH_LEVELATLAS.md  50 Levelkarten mit Arbeitsblättern
+BENUTZERHANDBUCH_LEVELATLAS.md  100 Levelkarten mit Arbeitsblättern
 ```
 
 ---
@@ -1123,4 +1131,4 @@ ____________________________________________________________________________
 ---
 
 **Ende des Benutzerhandbuchs**<br>
-Pyti-Lernumgebung · Anwendungsversion 1.2.0
+Pyti-Lernumgebung · Anwendungsversion 1.4.0

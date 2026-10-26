@@ -3,9 +3,9 @@
 import sys
 import threading
 import time
-import traceback
 
 from .robot import PytiWandKollisionError
+from .script_errors import format_script_error
 
 MAX_AUSFUEHRUNGSZEIT = 30
 AKTIONS_VERZOEGERUNG = 0.2
@@ -40,6 +40,12 @@ class BefehlsInterpreter:
                     "Autsch! Pyti ist gegen eine Wand oder den Rand gelaufen."
                 )
             robot.vor()
+        elif befehl == "jump":
+            if not welt.ist_sprung_frei(robot):
+                raise PytiWandKollisionError(
+                    "Pyti kann nur über eine Wand auf ein freies Landefeld springen."
+                )
+            robot.springen()
         elif befehl == "turnLeft":
             robot.links_drehen()
         elif befehl == "turnRight":
@@ -74,10 +80,10 @@ class BefehlsInterpreter:
         abbruch_event = abbruch_event or threading.Event()
         names = (
             "moveForward", "turnLeft", "turnRight", "turnAround",
-            "pickBeeper", "dropBeeper", "onBeeper", "beeperAhead",
+            "pickBeeper", "dropBeeper", "jump", "onBeeper", "beeperAhead",
             "frontClear", "leftClear", "rightClear", "anyBeeperInBag",
         )
-        actions = set(names[:6])
+        actions = set(names[:7])
 
         def aufrufen(name):
             if abbruch_event.is_set():
@@ -124,27 +130,12 @@ class BefehlsInterpreter:
         except SkriptAbbruchError as error:
             print(f"\n[ABGEBROCHEN]: {error}")
         except PytiWandKollisionError as error:
-            self._set_last_error(error)
+            self.last_execution_error = format_script_error(error)
             print(f"\n[FEHLER-STOPP]: {error}")
         except SkriptZeitlimitError as error:
-            self._set_last_error(error)
+            self.last_execution_error = format_script_error(error)
             print(f"\n[ZEITLIMIT-STOPP]: {error}")
         except (Exception, KeyboardInterrupt, SystemExit) as error:
-            self._set_last_error(error)
+            self.last_execution_error = format_script_error(error)
             print(f"\n[SYNTAX- ODER LAUFZEIT-FEHLER im Skript]: {error}")
         return False
-
-    def _set_last_error(self, error):
-        line = getattr(error, "lineno", None)
-        if line is None:
-            frames = traceback.extract_tb(error.__traceback__)
-            line = next(
-                (frame.lineno for frame in reversed(frames)
-                 if frame.filename == "<pyti-script>"),
-                None,
-            )
-        location = f" (Zeile {line})" if line is not None else ""
-        message = getattr(error, "msg", str(error))
-        self.last_execution_error = (
-            f"{type(error).__name__}{location}: {message}"
-        )

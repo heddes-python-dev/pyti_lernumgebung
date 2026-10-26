@@ -8,9 +8,9 @@ Python-Datei bleibt unter 150 Zeilen. Die Anwendung arbeitet ohne Webserver
 und externe Datenbank.
 
 Der aktuelle Versionsstand steht in `VERSION`; die Release-Aenderungen werden
-im `CHANGELOG.md` gepflegt. Version 1.2.0 ergaenzt Version 1.1.0 um die
-Modularisierung, automatisierte Verhaltenstests, abbrechbare Skriptausfuehrung,
-ein lokales Admin-Panel, interaktive Spielfeldbearbeitung und Level-Neustart.
+im `CHANGELOG.md` gepflegt. Version 1.4.0 ergänzt 50 Standardlevel, die
+Sprungaktion mit Wandprüfung und reproduzierbare Labyrinthe. Version 1.3.0
+ergänzte den grafischen Level-Creator und die verständliche Fehleranzeige.
 
 ## Komponenten
 
@@ -30,7 +30,8 @@ ein lokales Admin-Panel, interaktive Spielfeldbearbeitung und Level-Neustart.
 
 ### Spiellogik und Level
 
-- `pyti_app/robot.py` enthält Bewegung, Blickrichtung und Beeper-Inventar.
+- `pyti_app/robot.py` enthält Bewegung, Sprünge, Blickrichtung und
+  Beeper-Inventar.
 - `pyti_app/field_manager.py` verwaltet Weltzustand, Sensoren und Zielprüfung.
 - `pyti_app/field_rendering.py` zeichnet Raster, Wände, Pyti und Beeper.
 - `pyti_app/field_view.py` verarbeitet Linksklicks zum Bearbeiten von Beepern
@@ -42,7 +43,8 @@ ein lokales Admin-Panel, interaktive Spielfeldbearbeitung und Level-Neustart.
   Level als validiertes JSON im Benutzer-Konfigurationsordner;
   `level_catalog.py` ergänzt sie zur Laufzeit in der Levelauswahl.
 - `pyti_app/level_specs.py` speichert Missionsdaten; `level_generator.py`
-  erzeugt Wandmuster und `levels.py` baut daraus die Levelsammlung.
+  erzeugt Grundmuster und `maze_generator.py` reproduzierbare Labyrinthe mit
+  Sprungbarrieren. `levels.py` baut daraus die 100 Standardlevel.
 
 ### Skriptausführung und Editor
 

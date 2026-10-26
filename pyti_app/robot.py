@@ -35,6 +35,20 @@ class Pyti:
             f"{namen[self.richtung]} und läuft gegen die Wand!"
         )
 
+    def springen(self):
+        delta = {
+            NORD: (0, -2),
+            OST: (2, 0),
+            SÜD: (0, 2),
+            WEST: (-2, 0),
+        }[self.richtung]
+        naechstes_x = self.x + delta[0]
+        naechstes_y = self.y + delta[1]
+        if 0 <= naechstes_x < self.grid_size and 0 <= naechstes_y < self.grid_size:
+            self.x, self.y = naechstes_x, naechstes_y
+            return
+        raise PytiWandKollisionError("Pyti kann nicht über den Spielfeldrand springen.")
+
     def links_drehen(self):
         self.richtung = (self.richtung - 1) % 4
 

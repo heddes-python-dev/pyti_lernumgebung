@@ -1,11 +1,10 @@
 """Non-destructive health checks for the local admin panel."""
 
 import importlib
-from collections import deque
 
 from .field_manager import SpielfeldManager
 from .admin_store import AdminStore
-from .level_generator import GRID_SIZE
+from .level_paths import level_reachable
 from .robot import Pyti
 from .script_runtime import BefehlsInterpreter
 from .levels import LEVELS
@@ -78,7 +77,18 @@ def _check_gameplay():
     interpreter.aktion_ausfuehren("dropBeeper")
     if field.ziel_erreicht(robot, level["goal"]):
         raise RuntimeError("Abgelegter Ziel-Beeper wird weiter als gesammelt gezählt.")
-    return "Sensoren, Bewegung, Beeper und Zielprüfung funktionieren."
+    sprungfeld = SpielfeldManager(grid_size=3)
+    sprungrobot = Pyti(grid_size=3)
+    sprunglevel = {
+        "start_x": 0, "start_y": 1, "start_richtung": 1,
+        "waende": [(1, 1)], "beeper": [(2, 1)],
+        "goal": {"type": "collect_beeper", "position": (2, 1)},
+    }
+    sprungfeld.lade_level(sprunglevel, sprungrobot)
+    BefehlsInterpreter(sprungrobot, sprungfeld).aktion_ausfuehren("jump")
+    if (sprungrobot.x, sprungrobot.y) != (2, 1):
+        raise RuntimeError("Pyti kann die Sprungbarriere nicht überwinden.")
+    return "Sensoren, Bewegung, Sprung, Beeper und Zielprüfung funktionieren."
 
 
 def _check_levels(levels):
@@ -92,27 +102,9 @@ def _check_levels(levels):
         walls = set(map(tuple, level["waende"]))
         if start in walls or goal in walls:
             raise ValueError(f"{name}: Start oder Ziel liegt in einer Wand.")
-        if not _reachable(start, goal, walls):
+        if not level_reachable(start, goal, walls):
             raise ValueError(f"{name}: Ziel ist nicht erreichbar.")
     return f"{len(levels)} Level geprüft; alle Ziele sind erreichbar."
-
-
-def _reachable(start, goal, walls):
-    visited = {start}
-    queue = deque([start])
-    while queue:
-        x, y = queue.popleft()
-        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-            point = x + dx, y + dy
-            if (
-                0 <= point[0] < GRID_SIZE and 0 <= point[1] < GRID_SIZE
-                and point not in walls and point not in visited
-            ):
-                if point == goal:
-                    return True
-                visited.add(point)
-                queue.append(point)
-    return start == goal
 
 
 def _check_ui(widgets):
