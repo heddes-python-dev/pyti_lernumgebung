@@ -4,6 +4,12 @@ Danke für dein Interesse, Pyti zu verbessern! Willkommen sind Fehlerberichte,
 Ideen, Verbesserungen an der Dokumentation, neue Lernaufgaben und
 Codebeiträge.
 
+Für Fehlerberichte und Funktionsideen gibt es im GitHub-Projekt passende
+Issue-Formulare. Bitte nutze diese Vorlagen und teile keine persönlichen oder
+sensiblen Daten. Sicherheitslücken mit ausnutzbaren Details gehören nicht in
+ein öffentliches Issue; nutze dafür die vertrauliche Sicherheitsmeldung im
+Repository, sofern sie aktiviert ist.
+
 ## Projekt forken und lokal einrichten
 
 1. Melde dich bei GitHub an und erstelle über **Fork** eine Kopie von

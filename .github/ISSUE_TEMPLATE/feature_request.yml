@@ -1,0 +1,38 @@
+name: Idee oder Verbesserung vorschlagen
+description: Eine Funktion, Verbesserung oder Lernidee für Pyti vorschlagen
+title: "[Idee]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Beschreibe, welches Problem oder welchen Lernbedarf die Idee lösen soll.
+        Teile keine persönlichen oder sensiblen Daten.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem oder Lernbedarf
+      description: Was ist derzeit schwierig oder fehlt?
+      placeholder: Beschreibe den Bedarf aus Sicht der Lernenden oder Lehrenden.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Vorgeschlagene Lösung
+      description: Wie könnte Pyti diesen Bedarf erfüllen?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativen oder Beispiele
+      description: Welche Alternativen hast du erwogen? Gibt es ein Beispiel?
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Für wen ist die Idee besonders gedacht?
+      options:
+        - Lernende
+        - Lehrkräfte
+        - Lernende und Lehrkräfte
+        - Andere

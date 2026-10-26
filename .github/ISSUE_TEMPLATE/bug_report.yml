@@ -1,0 +1,66 @@
+name: Fehler melden
+description: Einen reproduzierbaren Fehler in Pyti melden
+title: "[Fehler]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Bitte melde hier keine Sicherheitslücken mit ausnutzbaren Details.
+        Teile außerdem keine Passwörter, Tokens oder persönlichen Daten.
+  - type: textarea
+    id: description
+    attributes:
+      label: Fehlerbeschreibung
+      description: Was ist passiert?
+      placeholder: Beschreibe den Fehler so konkret wie möglich.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Schritte zur Reproduktion
+      description: Welche Schritte führen zum Fehler?
+      placeholder: |
+        1. Pyti starten
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Erwartetes Verhalten
+      description: Was sollte stattdessen passieren?
+    validations:
+      required: true
+  - type: input
+    id: pyti-version
+    attributes:
+      label: Pyti-Version
+      description: Die Versionsnummer findest du unter „Über Pyti“.
+      placeholder: Zum Beispiel 1.4.0
+    validations:
+      required: true
+  - type: input
+    id: python-version
+    attributes:
+      label: Python-Version
+      placeholder: Zum Beispiel 3.12.2
+    validations:
+      required: true
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: Betriebssystem
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Sonstiges
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Weitere Hinweise
+      description: Ergänze bei Bedarf Fehlermeldungen oder einen Screenshot.

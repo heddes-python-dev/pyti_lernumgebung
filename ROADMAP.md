@@ -26,7 +26,7 @@ Anfangsschritte, aber noch keine Freigabe für unbeaufsichtigten Schuleinsatz.
 
 - [ ] `CONTRIBUTING.md` mit Entwicklungsinstallation, Tests, Stilregeln,
   Branch-/Pull-Request-Ablauf und Hinweisen für neue Mitwirkende ergänzen.
-- [ ] GitHub-Vorlagen für Fehlerberichte und Funktionsideen einrichten; bei
+- [x] GitHub-Vorlagen für Fehlerberichte und Funktionsideen einrichten; bei
   Fehlerberichten Betriebssystem, Python-Version und reproduzierbare Schritte
   abfragen, aber keine persönlichen oder sensiblen Daten erbitten.
 - [ ] CI für unterstützte Python-Versionen und Desktop-Betriebssysteme
