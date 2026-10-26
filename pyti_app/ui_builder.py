@@ -34,6 +34,7 @@ class PytiWidgets:
     beispiele_button: QPushButton
     admin_button: QPushButton
     creator_button: QPushButton
+    about_button: QPushButton
 
 
 def lade_fenster(ui_pfad):
@@ -68,7 +69,7 @@ def baue_ui(basis_pfad, level_namen):
     seitenleiste = QWidget(window)
     sidebar = QVBoxLayout(seitenleiste)
     sidebar.setContentsMargins(0, 0, 0, 0)
-    sidebar.setSpacing(10)
+    sidebar.setSpacing(8)
     seitenleiste.setMinimumWidth(320)
     seitenleiste.setMaximumWidth(420)
     seitenleiste.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
@@ -82,7 +83,7 @@ def baue_ui(basis_pfad, level_namen):
     sidebar.addWidget(reset)
     editor = CodeEditor(seitenleiste)
     editor.setObjectName("input_befehl")
-    editor.setMinimumHeight(400)
+    editor.setMinimumHeight(365)
     editor.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
     window.input_befehl = editor
     sidebar.addWidget(editor, 1)
@@ -98,6 +99,9 @@ def baue_ui(basis_pfad, level_namen):
     creator = QPushButton("Eigenes Level erstellen", seitenleiste)
     creator.setToolTip("Level grafisch entwerfen und als Python-Datei exportieren")
     sidebar.addWidget(creator)
+    about = QPushButton("Über Pyti", seitenleiste)
+    about.setToolTip("Projektinformationen, Mitwirkende und Sicherheitshinweise")
+    sidebar.addWidget(about)
     start_layout = QHBoxLayout()
     if start_button is not None:
         start_layout.addWidget(start_button)
@@ -125,13 +129,13 @@ def baue_ui(basis_pfad, level_namen):
     haupt_layout.addWidget(seitenleiste)
     return PytiWidgets(
         window, level_liste, editor, start_button, reset, stop, status,
-        mission, view, beispiele, admin, creator,
+        mission, view, beispiele, admin, creator, about,
     )
 
 
 def _baue_hilfe(parent):
     help_box = QTextBrowser(parent)
-    help_box.setFixedHeight(145)
+    help_box.setFixedHeight(120)
     help_box.setHtml(
         "<b>Aktionen:</b><br>"
         "<code>moveForward()</code>, <code>turnLeft()</code><br>"

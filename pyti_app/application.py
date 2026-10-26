@@ -18,6 +18,7 @@ from .levels import LEVELS
 from .robot import Pyti
 from .script_runtime import BefehlsInterpreter
 from .script_worker import SkriptBruecke
+from .project_info import erstelle_projektinfo_dialog
 from .ui_builder import baue_ui
 
 
@@ -52,6 +53,9 @@ def hauptprogramm():
     controller.admin_settings = settings
     controller.admin_scripts = scripts
     version = (basis_pfad / "VERSION").read_text(encoding="utf-8").strip()
+    widgets.about_button.clicked.connect(
+        lambda: erstelle_projektinfo_dialog(widgets.window, version).exec()
+    )
     widgets.admin_button.clicked.connect(
         lambda: AdminPanel(
             store, controller, controller.admin_settings,

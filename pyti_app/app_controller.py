@@ -56,6 +56,7 @@ class PytiController:
             widgets.beispiele_button,
             widgets.admin_button,
             widgets.creator_button,
+            widgets.about_button,
         ]
         if widgets.start_button is not None:
             self.controls.append(widgets.start_button)

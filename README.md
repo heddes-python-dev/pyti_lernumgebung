@@ -9,6 +9,34 @@ Das ausführliche Handbuch für Lernende und Administratoren gibt es als
 [Markdown-Handbuch](BENUTZERHANDBUCH.md) und
 [Levelatlas-Quelldatei](BENUTZERHANDBUCH_LEVELATLAS.md).
 
+## Projektinfo
+
+| | |
+|---|---|
+| **Idee** | Python und algorithmisches Denken durch sichtbare Aufgaben mit dem Roboter Pyti vermitteln. |
+| **Initiator und Hauptentwickler** | Thomas Heddes · [@heddes-python-dev](https://github.com/heddes-python-dev) |
+| **Öffentlicher Projektstart** | 19. September 2026; an diesem Tag wurde der erste Commit im öffentlichen Repository veröffentlicht. |
+| **Aktueller Stand** | Version 1.4.0 mit 100 Standardleveln |
+| **Lizenz** | [MIT-Lizenz](LICENSE) |
+| **Quellcode und Mitarbeit** | [GitHub-Projekt](https://github.com/heddes-python-dev/pyti_lernumgebung) |
+
+### Mitwirkende
+
+Pyti wird offen weiterentwickelt. Zu den bisherigen Mitwirkenden auf GitHub
+gehören [@heddes-python-dev](https://github.com/heddes-python-dev) für die
+Projektentwicklung und [@iLollek](https://github.com/iLollek) für eine
+Korrektur von Rechtschreibung und Grammatik in der README. Beiträge zu Code,
+Dokumentation, Übersetzungen und Unterrichtserprobung sind willkommen.
+
+### Status für Schulen
+
+Pyti ist ein wachsendes Open-Source-Lernprojekt, aber keine zertifizierte
+Schulsoftware. Die Anwendung führt Python-Lernskripte im eigenen Prozess aus
+und ist derzeit keine Sandbox. Für unbeaufsichtigte Nutzung mit nicht
+vertrauenswürdigen Skripten ist sie daher nicht freigegeben. Schul-Pilotierung,
+Barrierefreiheit, plattformübergreifende Installation und geeignete Isolation
+sind offene Entwicklungsziele; siehe [Roadmap](ROADMAP.md).
+
 ## Funktionen
 
 - Interaktives 15x15-Spielfeld
@@ -44,6 +72,9 @@ sind willkommen. Nutze die Issues und Pull Requests des
 [GitHub-Projekts](https://github.com/heddes-python-dev/pyti_lernumgebung);
 beschreibe bei Fehlern möglichst die Schritte zur Reproduktion, dein
 Betriebssystem und deine Python-Version.
+
+Die Schritte zum Forken, Einrichten, Erstellen eines Feature-Branches und
+Ausführen der Prüfungen stehen im [Leitfaden zum Mitwirken](CONTRIBUTING.md).
 
 Für lokale Entwicklung installierst du die Abhängigkeit wie oben beschrieben
 und führst die Tests aus:
