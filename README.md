@@ -36,6 +36,29 @@ Die aktuelle [Logik- und Plausibilitätsprüfung](docs/LOGIKPRUEFUNG.md) fasst
 die Testergebnisse, bestätigten Befunde und priorisierten nächsten Schritte
 zusammen. Die offene Planung steht in [ROADMAP.md](ROADMAP.md).
 
+## Mitmachen
+
+Pyti ist Open Source unter der [MIT-Lizenz](LICENSE). Fehlerberichte,
+Verbesserungsideen, Übersetzungen, Unterrichtserfahrungen und Codebeiträge
+sind willkommen. Nutze die Issues und Pull Requests des
+[GitHub-Projekts](https://github.com/heddes-python-dev/pyti_lernumgebung);
+beschreibe bei Fehlern möglichst die Schritte zur Reproduktion, dein
+Betriebssystem und deine Python-Version.
+
+Für lokale Entwicklung installierst du die Abhängigkeit wie oben beschrieben
+und führst die Tests aus:
+
+```bash
+python -m unittest discover -s tests -v
+python -m compileall -q pyti_app tests docs *.py
+git diff --check
+```
+
+Lernskripte werden mit normalem Python-`exec()` im Prozess ausgeführt. Pyti
+ist derzeit keine Sandbox und sollte nur mit vertrauenswürdigen Skripten
+verwendet werden. Hinweise zu Schul-Pilotierung, offenen Qualitätskriterien
+und Sicherheit stehen in der [Roadmap](ROADMAP.md).
+
 ## Voraussetzungen
 
 - Python 3.10 oder neuer
