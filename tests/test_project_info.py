@@ -26,6 +26,8 @@ class ProjektinfoTests(unittest.TestCase):
             "19. September 2026",
             "MIT",
             "iLollek",
+            "SansikaDev",
+            "Regressionstest für Menüaktionen",
             "keine Sandbox",
             "keine zertifizierte Schulsoftware",
             "CONTRIBUTING.md",

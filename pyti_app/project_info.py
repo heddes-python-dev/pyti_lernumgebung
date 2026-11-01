@@ -41,7 +41,9 @@ def _projektinfo_html(version):
         <b>Öffentlicher Projektstart:</b> 19. September 2026<br>
         <b>Bisherige Mitwirkende:</b>
         <a href="https://github.com/iLollek">@iLollek</a> (Korrektur von
-        Rechtschreibung und Grammatik)<br>
+        Rechtschreibung und Grammatik),
+        <a href="https://github.com/SansikaDev">@SansikaDev</a>
+        (Regressionstest für Menüaktionen während der Skriptausführung)<br>
         <b>Lizenz:</b> MIT</p>
         <h3>Open Source und Mitmachen</h3>
         <p>Pyti ist ein offenes Projekt. Fehlerberichte, Ideen, Dokumentation,

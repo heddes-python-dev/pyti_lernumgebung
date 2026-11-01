@@ -17,3 +17,19 @@ def register_custom_level(levels, level_list, name, level, store):
             level_list.setCurrentRow(-1)
             level_list.setCurrentRow(row)
     return key
+
+
+def delete_custom_level(levels, level_list, name, store):
+    if not name.startswith(store.PREFIX):
+        raise ValueError("Es können nur eigene Level gelöscht werden.")
+    if name not in levels:
+        raise ValueError(f"Eigenes Level nicht gefunden: {name}")
+    store.loeschen(name)
+    del levels[name]
+    for row in range(level_list.count()):
+        if level_list.item(row).text() == name:
+            was_current = level_list.currentRow() == row
+            level_list.takeItem(row)
+            if was_current and level_list.count():
+                level_list.setCurrentRow(min(row, level_list.count() - 1))
+            break

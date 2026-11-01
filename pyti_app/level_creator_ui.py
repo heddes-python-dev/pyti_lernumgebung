@@ -24,6 +24,14 @@ def build_creator_ui(dialog):
     draft_row.addWidget(dialog.delete_button)
     layout.addLayout(draft_row)
 
+    saved_row = QHBoxLayout()
+    saved_row.addWidget(QLabel("Gespeicherte eigene Level:", dialog))
+    dialog.saved_level_list = QComboBox(dialog)
+    dialog.delete_saved_button = QPushButton("Level löschen", dialog)
+    saved_row.addWidget(dialog.saved_level_list, 1)
+    saved_row.addWidget(dialog.delete_saved_button)
+    layout.addLayout(saved_row)
+
     form = QFormLayout()
     dialog.name = QLineEdit(dialog)
     dialog.mission = QLineEdit(dialog)

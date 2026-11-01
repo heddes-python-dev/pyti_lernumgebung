@@ -9,6 +9,8 @@ Alle bemerkenswerten Aenderungen dieses Projekts werden hier dokumentiert.
 - Regressionstest: die Aktionen unter Werkzeuge und Hilfe bleiben während
   eines Lernskripts deaktiviert und erhalten danach ihren vorherigen
   Aktivierungszustand zurück.
+- Eigene gespeicherte Level können im Level-Creator oder Admin-Panel nach
+  einer Bestätigung gelöscht werden; Standardlevel bleiben geschützt.
 
 ### Verbessert
 

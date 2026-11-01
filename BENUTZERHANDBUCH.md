@@ -528,10 +528,11 @@ erfüllen.
 
 ## Eigene Level bearbeiten
 
-Das Admin-Panel kann vorhandene Level anpassen. Es erstellt keine neuen
-Levelnamen und bietet keine Funktion zum Hinzufügen oder Löschen einer
-Levelmission. Die gespeicherten Änderungen überschreiben die Daten des
-entsprechenden bestehenden Levels in der lokalen Installation.
+Das Admin-Panel kann vorhandene Level anpassen. Neue Level werden im
+Level-Creator angelegt. Eigene Level können dort oder im Admin-Panel gelöscht
+werden; die mit Pyti ausgelieferten Standardlevel sind vor dem Löschen
+geschützt. Löschungen im Admin-Panel werden erst mit **Speichern** dauerhaft
+übernommen.
 
 ### Neue Level mit dem Level-Creator erstellen
 
@@ -562,6 +563,12 @@ eine manuelle Änderung an `pyti_app/levels.py` ist nicht erforderlich.
 Eigene Level erhalten den Präfix `Eigenes Level:` und ändern keine
 Standardmissionen. Wird ein Level desselben Namens bereits verwendet, fragt
 Pyti vor dem Ersetzen nach einer Bestätigung.
+
+Im Feld **Gespeicherte eigene Level** kannst du ein registriertes eigenes
+Level auswählen und über **Level löschen** entfernen. Pyti fragt vor dem
+dauerhaften Löschen nach einer Bestätigung. Diese Funktion betrifft nur
+gespeicherte Level, nicht die separat verwalteten Entwürfe. Entwürfe werden
+über **Entwurf löschen** entfernt.
 
 **Python-Datei exportieren** bleibt als optionale zusätzliche Funktion
 verfügbar, wenn du eine Leveldefinition als Quelltext weitergeben oder manuell
@@ -721,12 +728,14 @@ Vor dem Speichern prüft die Anwendung unter anderem:
 - es gibt einen Weg vom Start zum Ziel.
 
 Ungültige Änderungen werden mit einer Fehlermeldung abgewiesen. Korrigiere
-die Werte und speichere erneut. Das Admin-Panel bietet keine Schaltfläche zum
-Erstellen, Umbenennen oder Löschen einer Levelmission.
+die Werte und speichere erneut. Im Admin-Panel lassen sich eigene Level über
+**Eigenes Level löschen** nach einer Bestätigung zum Löschen vormerken.
+Standardlevel können nicht gelöscht werden.
 
 Nach dem erfolgreichen Speichern werden geänderte Level sofort in der
 laufenden Anwendung aktualisiert. Ist das bearbeitete Level aktiv, wird es
-mit den gespeicherten Start- und Spielfelddaten neu geladen.
+mit den gespeicherten Start- und Spielfelddaten neu geladen. Vorgemerkte
+Löschungen werden ebenfalls erst durch **Speichern** dauerhaft übernommen.
 
 ## Beispielskripte
 

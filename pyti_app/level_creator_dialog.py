@@ -5,18 +5,25 @@ from PySide6.QtWidgets import QDialog
 from .level_creator_actions import LevelCreatorActions
 from .field_manager import SpielfeldManager
 from .level_creator_data import LevelEntwurfSpeicher, neuer_entwurf
+from .level_creator_delete import LevelCreatorDeleteActions
 from .level_generator import GRID_SIZE
 from .robot import Pyti
 from .level_creator_ui import build_creator_ui
 
 
-class LevelCreatorDialog(LevelCreatorActions, QDialog):
+class LevelCreatorDialog(LevelCreatorActions, LevelCreatorDeleteActions, QDialog):
     def __init__(
-        self, draft_path, register_level, existing_level_keys, parent=None
+        self,
+        draft_path,
+        register_level,
+        existing_level_keys,
+        parent=None,
+        delete_level=None,
     ):
         super().__init__(parent)
         self.register_level = register_level
         self.existing_level_keys = existing_level_keys
+        self.delete_level = delete_level
         self.store = LevelEntwurfSpeicher(draft_path)
         self.persist_enabled = True
         self.loading = False
@@ -35,6 +42,7 @@ class LevelCreatorDialog(LevelCreatorActions, QDialog):
         self.resize(1080, 790)
         self._build_ui()
         self._load_draft(0)
+        self._refresh_registered_levels()
 
     def _build_ui(self):
         build_creator_ui(self)
@@ -42,6 +50,7 @@ class LevelCreatorDialog(LevelCreatorActions, QDialog):
         self.draft_list.currentIndexChanged.connect(self._select_draft)
         self.new_button.clicked.connect(self._new_draft)
         self.delete_button.clicked.connect(self._delete_draft)
+        self.delete_saved_button.clicked.connect(self._delete_registered_level)
         self.name.textChanged.connect(self._edited)
         self.mission.textChanged.connect(self._edited)
         self.direction.currentIndexChanged.connect(self._direction_changed)

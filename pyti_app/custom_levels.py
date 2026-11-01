@@ -31,6 +31,27 @@ class EigeneLevelSpeicher:
         AdminStore.validate_level(level)
         levels = self.laden()
         levels[key] = deepcopy(level)
+        self._speichern(levels)
+        return key
+
+    def loeschen(self, name):
+        self.loeschen_mehrere([name])
+
+    def loeschen_mehrere(self, names):
+        keys = set(names)
+        for key in keys:
+            if not isinstance(key, str) or not key.startswith(self.PREFIX):
+                raise ValueError("Es können nur eigene Level gelöscht werden.")
+        levels = self.laden()
+        missing = keys - levels.keys()
+        if missing:
+            raise ValueError(f"Eigenes Level nicht gefunden: {sorted(missing)[0]}")
+        for key in keys:
+            del levels[key]
+        if keys:
+            self._speichern(levels)
+
+    def _speichern(self, levels):
         self.path.parent.mkdir(parents=True, exist_ok=True)
         temporary = self.path.with_suffix(self.path.suffix + ".tmp")
         temporary.write_text(
@@ -38,7 +59,6 @@ class EigeneLevelSpeicher:
             encoding="utf-8",
         )
         temporary.replace(self.path)
-        return key
 
     @classmethod
     def schluessel(cls, name):

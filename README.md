@@ -24,8 +24,10 @@ Das ausführliche Handbuch für Lernende und Administratoren gibt es als
 
 Pyti wird offen weiterentwickelt. Zu den bisherigen Mitwirkenden auf GitHub
 gehören [@heddes-python-dev](https://github.com/heddes-python-dev) für die
-Projektentwicklung und [@iLollek](https://github.com/iLollek) für eine
-Korrektur von Rechtschreibung und Grammatik in der README. Beiträge zu Code,
+Projektentwicklung, [@iLollek](https://github.com/iLollek) für eine Korrektur
+von Rechtschreibung und Grammatik in der README und
+[@SansikaDev](https://github.com/SansikaDev) für einen Regressionstest, der
+Menüaktionen während der Skriptausführung prüft. Beiträge zu Code,
 Dokumentation, Übersetzungen und Unterrichtserprobung sind willkommen.
 
 ### Status für Schulen
@@ -58,7 +60,8 @@ sind offene Entwicklungsziele; siehe [Roadmap](ROADMAP.md).
 - Responsive Oberflaeche mit grossem Editorbereich
 - Lokales Admin-Panel für Statusprüfungen, Einstellungen, Level und Beispielskripte
 - Grafischer Level-Creator mit lokal gespeicherten Entwürfen und automatischer
-  Übernahme in die Levelauswahl; Python-Quelltextexport zusätzlich verfügbar
+  Übernahme in die Levelauswahl; eigene gespeicherte Level können im Creator
+  oder Admin-Panel gelöscht werden; Python-Quelltextexport zusätzlich verfügbar
 - Allgemeine Aktionen wie Beispiele, Administration und Projektinfo in der Menüleiste
 
 Die aktuelle [Logik- und Plausibilitätsprüfung](docs/LOGIKPRUEFUNG.md) fasst

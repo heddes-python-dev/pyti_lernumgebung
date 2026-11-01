@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QListWidget,
     QPlainTextEdit,
+    QPushButton,
     QSpinBox,
     QVBoxLayout,
     QWidget,
@@ -16,17 +17,22 @@ from PySide6.QtWidgets import (
 
 from .admin_coordinates import CoordinateEditor
 from .admin_store import AdminStore
+from .custom_levels import EigeneLevelSpeicher
 
 
 class LevelEditorTab(QWidget):
-    def __init__(self, levels, parent=None):
+    def __init__(self, levels, parent=None, allow_custom_deletion=False):
         super().__init__(parent)
         self.levels = deepcopy(levels)
         self.active_name = ""
+        self.allow_custom_deletion = allow_custom_deletion
         layout = QGridLayout(self)
         self.level_list = QListWidget(self)
         self.level_list.setMinimumWidth(230)
-        layout.addWidget(self.level_list, 0, 0, 2, 1)
+        layout.addWidget(self.level_list, 0, 0, 1, 1)
+        self.delete_button = QPushButton("Eigenes Level löschen", self)
+        self.delete_button.setEnabled(allow_custom_deletion)
+        layout.addWidget(self.delete_button, 1, 0)
         self.details = QWidget(self)
         form = QFormLayout(self.details)
         self.description = QPlainTextEdit(self.details)
@@ -51,6 +57,7 @@ class LevelEditorTab(QWidget):
         ), 1, 1)
         self.level_list.addItems(self.levels)
         self.level_list.currentTextChanged.connect(self._change_level)
+        self.level_list.currentTextChanged.connect(self._update_delete_button)
         self.level_list.setCurrentRow(0)
 
     @staticmethod
@@ -96,6 +103,30 @@ class LevelEditorTab(QWidget):
             "beeper": self.beepers.coordinates(),
         })
         level["goal"]["position"] = [self.goal_x.value(), self.goal_y.value()]
+
+    def _update_delete_button(self, name):
+        self.delete_button.setEnabled(
+            self.allow_custom_deletion
+            and name.startswith(EigeneLevelSpeicher.PREFIX)
+        )
+
+    def remove_level(self, name):
+        if not name.startswith(EigeneLevelSpeicher.PREFIX) or name not in self.levels:
+            raise ValueError("Es können nur vorhandene eigene Level gelöscht werden.")
+        if self.active_name:
+            self._capture()
+        row = next(
+            index for index in range(self.level_list.count())
+            if self.level_list.item(index).text() == name
+        )
+        self.levels.pop(name)
+        self.active_name = ""
+        self.level_list.takeItem(row)
+        if self.level_list.count():
+            self.level_list.setCurrentRow(min(row, self.level_list.count() - 1))
+        else:
+            self.details.setEnabled(False)
+            self.delete_button.setEnabled(False)
 
     def values(self):
         if self.active_name:

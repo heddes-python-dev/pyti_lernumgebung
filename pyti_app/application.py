@@ -13,7 +13,7 @@ from .field_manager import SpielfeldManager
 from .level_generator import GRID_SIZE
 from .level_creator_dialog import LevelCreatorDialog
 from .custom_levels import EigeneLevelSpeicher
-from .level_catalog import register_custom_level
+from .level_catalog import delete_custom_level, register_custom_level
 from .levels import LEVELS
 from .robot import Pyti
 from .script_runtime import BefehlsInterpreter
@@ -59,7 +59,10 @@ def hauptprogramm():
     widgets.admin_action.triggered.connect(
         lambda: AdminPanel(
             store, controller, controller.admin_settings,
-            controller.admin_scripts, version, store.load_error
+            controller.admin_scripts,
+            version,
+            store.load_error,
+            custom_store,
         ).exec()
     )
     draft_path = config_pfad.parent / "level_creator_drafts.json"
@@ -71,6 +74,9 @@ def hauptprogramm():
             ),
             lambda: controller.levels.keys(),
             widgets.window,
+            delete_level=lambda name: delete_custom_level(
+                controller.levels, widgets.level_liste, name, custom_store
+            ),
         ).exec()
     )
     widgets.spielfeld_view.setScene(field.scene)

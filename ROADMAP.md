@@ -123,8 +123,9 @@ sich diese nächsten Schritte:
 ## Editor & Usability
 
 - [x] **Lokales Admin-Panel:** Funktionsprüfungen anzeigen, Einstellungen und
-  Level grafisch bearbeiten sowie Beispielskripte ohne Quellcodeänderungen
-  verwalten. Änderungen werden lokal gespeichert.
+  Level grafisch bearbeiten, eigene Level nach Bestätigung löschen sowie
+  Beispielskripte ohne Quellcodeänderungen verwalten. Änderungen werden lokal
+  gespeichert; Standardlevel sind vor dem Löschen geschützt.
 - [ ] **Code-Persistence:** Den eingegebenen Skripttext beim Levelwechsel
   zwischenspeichern und bei Bedarf wiederherstellen.
 - [x] **Level-Neustart per Knopfdruck:** Den ausgewählten Level mit Startpunkt,
@@ -137,8 +138,9 @@ sich diese nächsten Schritte:
 ## Kreativ-Werkzeuge & Extras
 
 - [x] **Level-Creator-Modus:** Eigene Level in einem separaten Dialog grafisch
-  erstellen, Entwürfe lokal speichern und geprüfte Level automatisch in die
-  Levelauswahl übernehmen; optional bleibt der Python-Quelltextexport.
+  erstellen, Entwürfe lokal speichern, geprüfte Level automatisch in die
+  Levelauswahl übernehmen und gespeicherte eigene Level wieder löschen;
+  Standardlevel bleiben geschützt, optional bleibt der Python-Quelltextexport.
 
 ## Auslieferung
 
