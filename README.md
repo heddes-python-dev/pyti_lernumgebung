@@ -92,7 +92,6 @@ guter Einstieg. Auf GitHub findest du weitere Tickets mit dem Label
 - [Einsteigerübung zu Schleifen ergänzen](https://github.com/heddes-python-dev/pyti_lernumgebung/issues/2)
 - [Tastenkürzel zum Neustart des aktuellen Levels](https://github.com/heddes-python-dev/pyti_lernumgebung/issues/3)
 - [Fehlerdetails in die Zwischenablage kopieren](https://github.com/heddes-python-dev/pyti_lernumgebung/issues/4)
-- [Tests für deaktivierte Menüpunkte während der Skriptausführung](https://github.com/heddes-python-dev/pyti_lernumgebung/issues/5)
 
 Lies vor deinem Beitrag den [Leitfaden zum Mitwirken](CONTRIBUTING.md) und
 kommentiere das gewünschte Issue vor Beginn, damit andere sehen, dass du

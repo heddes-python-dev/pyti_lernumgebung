@@ -4,6 +4,12 @@ Alle bemerkenswerten Aenderungen dieses Projekts werden hier dokumentiert.
 
 ## Unreleased
 
+### Hinzugefuegt
+
+- Regressionstest: die Aktionen unter Werkzeuge und Hilfe bleiben während
+  eines Lernskripts deaktiviert und erhalten danach ihren vorherigen
+  Aktivierungszustand zurück.
+
 ### Verbessert
 
 - Allgemeine Aktionen sind in die Menüleiste verschoben; die Seitenleiste
