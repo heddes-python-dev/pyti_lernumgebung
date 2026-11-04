@@ -1,13 +1,15 @@
 import os
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 from PySide6.QtWidgets import QApplication
 
-from pyti_app.admin_checks import pruefe_system
+from pyti_app.admin_checks import _check_sandbox, pruefe_system
 from pyti_app.admin_panel import AdminPanel
 from pyti_app.admin_store import AdminStore
 from pyti_app.app_controller import PytiController
@@ -26,6 +28,18 @@ class AdminUITests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.app = QApplication.instance() or QApplication([])
+
+    def test_sandbox_check_reports_unsupported_os_as_information(self):
+        with patch("pyti_app.admin_checks.sys.platform", "win32"):
+            self.assertEqual(
+                _check_sandbox(),
+                (
+                    "HINWEIS",
+                    "Skriptsandbox",
+                    "Skriptausführung wird auf diesem Betriebssystem "
+                    "nicht unterstützt.",
+                ),
+            )
 
     def test_central_admin_tabs_save_and_restore_settings(self):
         widgets = baue_ui(Path.cwd(), LEVELS.keys())
@@ -75,8 +89,20 @@ class AdminUITests(unittest.TestCase):
                 statuses = pruefe_system(
                     controller.levels, widgets, interpreter
                 )
+                status_by_name = {
+                    name: status for status, name, _ in statuses
+                }
+                expected_sandbox_status = (
+                    "OK" if sys.platform.startswith("linux") else "HINWEIS"
+                )
+                self.assertEqual(
+                    status_by_name["Skriptsandbox"], expected_sandbox_status
+                )
                 self.assertTrue(
-                    all(status == "OK" for status, _, _ in statuses),
+                    all(
+                        status in ("OK", "HINWEIS")
+                        for status, _, _ in statuses
+                    ),
                     repr(statuses),
                 )
                 reopened.close()

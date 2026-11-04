@@ -1,6 +1,7 @@
 """Non-destructive health checks for the local admin panel."""
 
 import importlib
+import sys
 import threading
 
 from .field_manager import SpielfeldManager
@@ -17,7 +18,7 @@ def pruefe_system(levels, widgets, interpreter, startup_error=""):
         _check("Module", _check_imports),
         _check("Spiellogik", _check_gameplay),
         _check("Level", lambda: _check_levels(levels)),
-        _check("Skriptsandbox", _check_script_sandbox),
+        _check_sandbox(),
         _check("Oberfläche", lambda: _check_ui(widgets)),
     ]
     if startup_error:
@@ -39,6 +40,16 @@ def _check(name, callback):
         return "OK", name, detail or "Prüfung erfolgreich."
     except Exception as error:
         return "FEHLER", name, f"{type(error).__name__}: {error}"
+
+
+def _check_sandbox():
+    if not sys.platform.startswith("linux"):
+        return (
+            "HINWEIS",
+            "Skriptsandbox",
+            "Skriptausführung wird auf diesem Betriebssystem nicht unterstützt.",
+        )
+    return _check("Skriptsandbox", _check_script_sandbox)
 
 
 def _check_imports():

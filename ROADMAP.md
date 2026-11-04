@@ -30,15 +30,20 @@ Anfangsschritte, aber noch keine Freigabe für unbeaufsichtigten Schuleinsatz.
 
 ### 2. Beiträge einfach und sicher ermöglichen
 
-- [ ] `CONTRIBUTING.md` mit Entwicklungsinstallation, Tests, Stilregeln,
+- [x] `CONTRIBUTING.md` mit Entwicklungsinstallation, Tests, Stilregeln,
   Branch-/Pull-Request-Ablauf und Hinweisen für neue Mitwirkende ergänzen.
 - [x] GitHub-Vorlagen für Fehlerberichte und Funktionsideen einrichten; bei
   Fehlerberichten Betriebssystem, Python-Version und reproduzierbare Schritte
   abfragen, aber keine persönlichen oder sensiblen Daten erbitten.
-- [ ] CI für unterstützte Python-Versionen und Desktop-Betriebssysteme
+- [x] CI für unterstützte Python-Versionen und Desktop-Betriebssysteme
   einrichten: Tests, Syntax- und Größenprüfungen sowie Paket-/Start-Smoke-Test.
-- [ ] Änderungen von außen reviewen und festlegen, wer Releases und
-  sicherheitsrelevante Änderungen verantwortet.
+- [x] Review-, Release- und Sicherheitsverantwortung in
+  `GOVERNANCE.md`/`SECURITY.md` festlegen. Aktuell ist
+  `@heddes-python-dev` verantwortlich; vertrauliche Sicherheitsmeldungen und
+  Dependabot-Sicherheitsupdates sind aktiviert. GitHub-Branch-Protection ist
+  noch nicht aktiv und wird erst mit einer zweiten unabhängigen
+  Maintainer-Person verpflichtend eingerichtet. Pull Requests und Releases
+  müssen die CI bestehen; reale externe Beiträge werden nach Eingang reviewed.
 
 ### 3. Pädagogische Qualität mit Schulen erproben
 

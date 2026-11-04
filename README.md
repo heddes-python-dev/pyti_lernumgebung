@@ -116,7 +116,9 @@ kommentiere das gewünschte Issue vor Beginn, damit andere sehen, dass du
 daran arbeitest.
 
 Die Schritte zum Forken, Einrichten, Erstellen eines Feature-Branches und
-Ausführen der Prüfungen stehen im [Leitfaden zum Mitwirken](CONTRIBUTING.md).
+Ausführen der Prüfungen stehen im [Leitfaden zum Mitwirken](CONTRIBUTING.md);
+Review- und Release-Zuständigkeiten beschreibt die
+[Projektverantwortung](GOVERNANCE.md).
 
 Für lokale Entwicklung installierst du die Abhängigkeit wie oben beschrieben
 und führst die Tests aus:

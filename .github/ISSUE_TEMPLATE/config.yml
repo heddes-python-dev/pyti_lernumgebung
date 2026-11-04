@@ -2,4 +2,4 @@ blank_issues_enabled: false
 contact_links:
   - name: Sicherheitslücke vertraulich melden
     url: https://github.com/heddes-python-dev/pyti_lernumgebung/security/advisories/new
-    about: Sicherheitsprobleme nicht öffentlich posten; nutze die vertrauliche Meldung, sofern verfügbar.
+    about: Sicherheitsprobleme nicht öffentlich posten; die vertrauliche Meldung ist aktiviert.

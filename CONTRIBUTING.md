@@ -14,7 +14,9 @@ Für Fehlerberichte und Funktionsideen gibt es im GitHub-Projekt passende
 Issue-Formulare. Bitte nutze diese Vorlagen und teile keine persönlichen oder
 sensiblen Daten. Sicherheitslücken mit ausnutzbaren Details gehören nicht in
 ein öffentliches Issue; nutze dafür die vertrauliche Sicherheitsmeldung im
-Repository, sofern sie aktiviert ist.
+Repository. Der vertrauliche GitHub-Meldeweg ist aktiviert. Weitere
+Informationen stehen in [SECURITY.md](SECURITY.md) und die Zuständigkeiten in
+[GOVERNANCE.md](GOVERNANCE.md).
 
 ## Projekt forken und lokal einrichten
 
@@ -53,14 +55,21 @@ Repository, sofern sie aktiviert ist.
    python -m pip install -r requirements.txt
    ```
 
+Unter Linux benötigt die isolierte Skriptausführung zusätzlich bubblewrap
+(`bwrap`) und aktivierte User Namespaces. Auf Debian/Ubuntu installierst du es
+mit `sudo apt install bubblewrap`. Unter macOS und Windows lässt sich die
+Oberfläche testen, die Skriptausführung ist dort absichtlich deaktiviert.
+
 ## Feature-Branch erstellen
 
-Erstelle für jede Änderung einen eigenen Branch auf Basis von `master`:
+Ergänze nach dem Klonen deines Forks einmalig das Original-Repository als
+`upstream`. Erstelle dann für jede Änderung einen eigenen Branch auf dem
+aktuellen Stand von `master`:
 
 ```bash
-git switch master
-git pull origin master
-git switch -c feature/kurze-beschreibung
+git remote add upstream https://github.com/heddes-python-dev/pyti_lernumgebung.git
+git fetch upstream
+git switch -c feature/kurze-beschreibung upstream/master
 ```
 
 Für Fehlerbehebungen kannst du statt `feature/` den Präfix `fix/` verwenden.
@@ -77,7 +86,7 @@ Führe vor dem Pull Request die Tests und grundlegenden Prüfungen aus:
 
 ```bash
 python -m unittest discover -s tests -v
-python -m compileall -q pyti_app tests docs *.py
+python -m compileall -q pyti_app tests docs main.py commands.py editor.py highlighter.py level.py playing_field.py pyti.py
 git diff --check
 ```
 
@@ -86,6 +95,11 @@ Unter Linux ohne grafische Anzeige:
 ```bash
 QT_QPA_PLATFORM=offscreen python -m unittest discover -s tests -v
 ```
+
+Die GitHub-Actions-CI führt Tests, Syntax- und Größenprüfungen sowie einen
+UI-Start-Smoke-Test unter Python 3.10 bis 3.14 auf Ubuntu, macOS und Windows
+aus. Die Sandbox-Tests laufen nur unter Linux mit bubblewrap; auf den anderen
+Systemen werden sie als plattformspezifisch übersprungen.
 
 Prüfe außerdem, dass keine Python-Datei die projektweite Grenze von
 150 Zeilen überschreitet. Die Testsuite enthält dafür einen eigenen Test:
@@ -112,12 +126,16 @@ Bei einem Fehlerbericht helfen eine genaue Beschreibung der Schritte zur
 Wiederholung, das Betriebssystem und die Python-Version. Teile keine
 Passwörter, Tokens oder sonstigen sensiblen Daten.
 
+Pull Requests werden von der Projektverantwortung geprüft. Bitte warte auf
+Review und erfolgreiche CI, bevor du mit einer Annahme rechnest. Details zu
+Review, Releases und Zuständigkeiten stehen in [GOVERNANCE.md](GOVERNANCE.md).
+
 ## Sicherheitshinweis
 
 Auf Linux führt Pyti Lernskripte in einem bubblewrap-Prozess aus; auf anderen
 Betriebssystemen bleibt die Ausführung deaktiviert. Diese Isolation ist noch
 nicht unabhängig geprüft und stellt keine Freigabe für nicht
 vertrauenswürdigen Code dar. Führe nur Skripte aus, denen du vertraust.
-Melde vermutete Sicherheitsprobleme nicht als öffentliches Issue mit
-ausnutzbaren Details; kontaktiere zuerst die Projektverantwortlichen über
-GitHub.
+Melde vermutete Sicherheitsprobleme über den vertraulichen Weg in
+[SECURITY.md](SECURITY.md), nicht als öffentliches Issue mit ausnutzbaren
+Details.
