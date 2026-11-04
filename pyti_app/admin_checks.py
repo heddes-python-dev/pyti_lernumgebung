@@ -1,12 +1,14 @@
 """Non-destructive health checks for the local admin panel."""
 
 import importlib
+import threading
 
 from .field_manager import SpielfeldManager
 from .admin_store import AdminStore
 from .level_paths import level_reachable
 from .robot import Pyti
 from .script_runtime import BefehlsInterpreter
+from .script_sandbox import LinuxScriptSandbox
 from .levels import LEVELS
 
 
@@ -15,6 +17,7 @@ def pruefe_system(levels, widgets, interpreter, startup_error=""):
         _check("Module", _check_imports),
         _check("Spiellogik", _check_gameplay),
         _check("Level", lambda: _check_levels(levels)),
+        _check("Skriptsandbox", _check_script_sandbox),
         _check("Oberfläche", lambda: _check_ui(widgets)),
     ]
     if startup_error:
@@ -48,6 +51,11 @@ def _check_imports():
     for module in modules:
         importlib.import_module(module)
     return f"{len(modules)} Anwendungsmodule importierbar."
+
+
+def _check_script_sandbox():
+    LinuxScriptSandbox().execute("pass", lambda _name: None, 3, threading.Event())
+    return "bubblewrap-Kindprozess erfolgreich gestartet und beendet."
 
 
 def _check_gameplay():

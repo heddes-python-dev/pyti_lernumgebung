@@ -41,15 +41,16 @@ class MenueAktionenTests(unittest.TestCase):
             [action.text() for action in actions],
             [
                 "Beispiele",
-                "Administration",
+                "Admin-Bereich",
                 "Eigenes Level erstellen",
+                "Erste Mission",
                 "Über Pyti",
             ],
         )
         widgets.admin_action.setEnabled(False)
         widgets.about_action.setEnabled(True)
         previous = [action.isEnabled() for action in actions]
-        self.assertEqual(previous, [True, False, True, True])
+        self.assertEqual(previous, [True, False, True, True, True])
         widgets.editor.setPlainText("while True:\n    pass\n")
         controller.start()
         try:

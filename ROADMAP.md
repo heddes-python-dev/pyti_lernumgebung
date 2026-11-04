@@ -4,6 +4,10 @@ Geplante Features, Ideen und Erweiterungen für Pyti. Die Punkte sind nach
 Themen geordnet; die Reihenfolge innerhalb eines Abschnitts ist eine sinnvolle
 Umsetzungsreihenfolge, keine verbindliche Terminplanung.
 
+Die [pädagogische Lernweg-Roadmap](docs/LERNWEG_ROADMAP.md) beschreibt die
+Lernprogression und Erprobung. Diese Datei fokussiert auf technische
+Entwicklung und Projektbereitschaft.
+
 ## Open Source und Einsatz in Schulen
 
 Ziel ist, Pyti als offenes, gemeinschaftlich weiterentwickeltes Lernwerkzeug
@@ -52,23 +56,57 @@ Anfangsschritte, aber noch keine Freigabe für unbeaufsichtigten Schuleinsatz.
 
 ### 4. Sicherheitsfreigabe vor breitem Schuleinsatz
 
-- [ ] Vor jeder Empfehlung für unbeaufsichtigte Nutzung die Skriptausführung
-  neu bewerten: Lernskripte verwenden derzeit `exec()` mit regulären
-  Python-Built-ins und laufen im Anwendungsprozess; Zeitlimit und Stoppknopf
-  sind keine Sandbox.
-- [ ] Für unbeaufsichtigte oder verwaltete Geräte ein tragfähiges
-  Bedrohungsmodell und eine geeignete Isolation entwerfen, unabhängig prüfen
-  und mit adversarialen Tests absichern. Bis dahin nur begleitete Nutzung mit
-  vertrauenswürdigen Skripten empfehlen.
-- [ ] Datenschutz und lokale Speicherung prüfen und dokumentieren. Pyti
-  benötigt derzeit kein Konto und keinen Webdienst; künftige Telemetrie oder
-  Online-Funktionen erfordern eine gesonderte Prüfung und transparente
-  Zustimmung.
+- [x] Skriptausführung und Bedrohungsgrenze neu bewerten: uneingeschränktes
+  `exec()` im App-Prozess, Zeitlimit und Stoppknopf bieten keine Isolation.
+  Das derzeitige Ziel ist deshalb auf Linux mit bubblewrap beschränkt.
+- [x] Linux-Isolation implementieren: Kindprozess in User-, PID-, Netzwerk-
+  und weiteren Namespaces, temporäres Root-Dateisystem mit Positivliste der
+  benötigten Python-Laufzeit und Systembibliotheken, begrenzte temporäre
+  Dateisysteme, Prozess-/CPU-/Speicherlimits, begrenztes Aktionsprotokoll und
+  fail-closed Verhalten. Automatisierte Tests prüfen unter anderem, dass
+  Hostdateien nicht sichtbar oder veränderbar sind, dass Netzwerkzugriff
+  blockiert ist sowie Fehlerweitergabe und Timeout.
+- [ ] Die Isolation unabhängig prüfen und mit adversarialen Tests auf den
+  tatsächlich verwendeten Schul-Linux-Systemen absichern. Bis zur Prüfung
+  keine Nutzung mit nicht vertrauenswürdigen Skripten und keine Kindertests
+  auf normalen Rechnern freigeben. Auf macOS und Windows bleibt die
+  Skriptausführung deaktiviert.
+- [x] Aktuellen Datenschutz- und Speicherumfang prüfen: kein Konto, keine
+  Datenbank und keine App-Telemetrie; Admin- und eigene Leveldaten liegen
+  lokal. Künftige Telemetrie oder Online-Funktionen erfordern eine gesonderte
+  Prüfung und transparente Zustimmung.
 
 Ein breiter Schuleinsatz gilt erst dann als vorbereitet, wenn die offenen
 Sicherheits-, Installations-, Bedienbarkeits- und Pilotkriterien überprüft
 und mit Belegen dokumentiert sind. MIT-Lizenz und öffentlicher Quellcode
 allein bedeuten keine Sicherheits- oder Qualitätszertifizierung.
+
+### Stufenweise Erprobungsfreigabe
+
+„Intern testen“ und „Kindern zur Erprobung geben“ sind unterschiedliche
+Freigabestufen:
+
+- **Interner Funktionstest durch Projektverantwortliche:** Kann mit eigenen,
+  vertrauenswürdigen Skripten auf Linux mit funktionierender bubblewrap-
+  Isolation stattfinden. Dabei App-Ablauf, Levelneustart, Editorzustand,
+  Hilfetexte und Fehleranzeigen prüfen. Keine fremden oder unbekannten
+  Skripte ausführen.
+- **Begleiteter Test mit Kindern, die Code verändern und starten:** Noch
+  nicht freigegeben. Die Isolation ist implementiert, aber nicht unabhängig
+  geprüft; Erwachsenenaufsicht allein ersetzt diese Prüfung und die
+  Freigabevoraussetzungen für den konkreten Pilot nicht.
+- **Freigabe für einen begleiteten Kindertest:** Erst nach dokumentierter
+  unabhängiger Sicherheitsbewertung und einer zur Bedrohung passenden,
+  überprüften Ausführungsbegrenzung; zusätzlich müssen Installationsweg,
+  Wiederherstellung, Datenschutz, Einwilligungen und Zuständigkeiten für den
+  konkreten Pilot geklärt sein. Falls diese Bedingungen nicht erfüllt sind,
+  nur mit einer kontrollierten Umgebung testen, in der keine persönlichen
+  oder wichtigen Daten und keine vertraulichen Zugänge erreichbar sind; diese
+  Maßnahme ist keine Sandbox und keine allgemeine Freigabe.
+- **Breiter Schuleinsatz:** Bleibt gesperrt, bis auch die übrigen
+  Sicherheits-, Plattform-, Barrierefreiheits- und Supportkriterien erfüllt
+  und dokumentiert sind. Die derzeitige bubblewrap-Implementierung allein
+  stellt keine Sicherheitsfreigabe dar.
 
 ## Prioritäten aus der Logikprüfung
 
@@ -100,9 +138,11 @@ sich diese nächsten Schritte:
 - [x] **Admin-Warnungen erneuern:** Ladefehler beim erneuten Einlesen einer
   gültigen oder nicht vorhandenen Konfiguration löschen und den Ablauf
   „fehlerhafte Datei, danach erfolgreicher Ladevorgang“ testen.
-- [x] **Level-Missionen plausibilisieren:** Einzigartigkeitsversprechen gelten
-  nur bei genau einer kürzesten Bewegungsroute auf dem Raster. Der Regressionstest
-  prüft alle 100 Standardlevel und sichert entsprechende Missionstexte ab.
+- [x] **Level-Missionen plausibilisieren:** Eindeutigkeitsversprechen werden
+  nur bei genau einer kürzesten Bewegungsroute verwendet; beschriebene
+  Hindernisse müssen den Weg tatsächlich beeinflussen. Regressionstests
+  prüfen entsprechende Missionstexte, die frühe Geometrie und alle 100
+  Standardlevel.
 - [x] **Level im Interpreter regressionsprüfen:** Für jedes der 100
   Standardlevel eine kürzeste Route ermitteln, daraus ein Python-Skript mit
   echten Pyti-Befehlen erzeugen, es durch den Interpreter ausführen und das
@@ -112,6 +152,11 @@ sich diese nächsten Schritte:
 
 - [x] **Automatisierte Zielprüfung:** Automatische Erkennung, wenn der
   Ziel-Beeper eingesammelt wurde, inklusive Erfolgsmeldung.
+- [x] **Geführte erste Mission:** Levelabhängiges vollständiges Beispiel,
+  eine einzelne sinnvolle Lücke, drei gestufte Tipps und nach den Tipps
+  freischaltbare Lösung für die ausgewählten frühen Level. Technisch
+  automatisiert geprüft; pädagogische Erprobung bleibt in der
+  [Lernweg-Roadmap](docs/LERNWEG_ROADMAP.md) offen.
 - [ ] **Fortschrittsspeicherung:** Abgeschlossene Level lokal (z. B. in einer
   JSON-Datei) speichern und beim nächsten Start wiederherstellen.
 - [ ] **Lernpfad für Level:** Pro Level Lernziel, optionalen Tipp und eine

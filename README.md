@@ -33,11 +33,20 @@ Dokumentation, Übersetzungen und Unterrichtserprobung sind willkommen.
 ### Status für Schulen
 
 Pyti ist ein wachsendes Open-Source-Lernprojekt, aber keine zertifizierte
-Schulsoftware. Die Anwendung führt Python-Lernskripte im eigenen Prozess aus
-und ist derzeit keine Sandbox. Für unbeaufsichtigte Nutzung mit nicht
-vertrauenswürdigen Skripten ist sie daher nicht freigegeben. Schul-Pilotierung,
-Barrierefreiheit, plattformübergreifende Installation und geeignete Isolation
-sind offene Entwicklungsziele; siehe [Roadmap](ROADMAP.md).
+Schulsoftware. Auf Linux führt die App Lernskripte in einem separaten
+bubblewrap-Prozess mit eingeschränkten Dateisystem-, Netzwerk- und
+Ressourcenrechten aus. Diese Isolation ist noch nicht unabhängig
+sicherheitsgeprüft; unbeaufsichtigte Nutzung und Kindertests auf normalen
+Rechnern sind deshalb nicht freigegeben. Auf macOS und Windows wird die
+Skriptausführung derzeit verweigert. Schul-Pilotierung, Barrierefreiheit,
+Installationsprüfung und unabhängige Sicherheitsprüfung bleiben offen;
+siehe [Roadmap](ROADMAP.md).
+
+Die geführte erste Mission und ihre Vorlagen sind implementiert und
+automatisiert geprüft. Eine pädagogische Erprobung mit Lernenden hat noch
+nicht stattgefunden.
+Der Lernweg-Status und die offenen Schritte stehen in der
+[pädagogischen Roadmap](docs/LERNWEG_ROADMAP.md).
 
 ## Funktionen
 
@@ -48,6 +57,9 @@ sind offene Entwicklungsziele; siehe [Roadmap](ROADMAP.md).
 - Automatische Prüfung, ob der Ziel-Beeper aufgenommen wurde
 - Editor mit Zeilennummern, Python-Syntax-Highlighting und Tab-Unterstuetzung
 - Optionales Beispiele-Fenster mit Inhalten aus `EXAMPLES.md`
+- Geführte erste Mission unter **Hilfe → Erste Mission** für ausgewählte
+  Level von `0.0.1` bis `0.1.0`, mit vollständigem Beispiel,
+  Ein-Aktions-Lückenvorlage, gestuften Tipps und freischaltbarer Lösung
 - Roboterbewegung mit sichtbarer Richtungsanzeige
 - Wände, Randkollisionen und Beeper
 - Beeper aufnehmen und ablegen
@@ -58,7 +70,8 @@ sind offene Entwicklungsziele; siehe [Roadmap](ROADMAP.md).
 - Waende per Rechtsklick setzen oder entfernen; den Level per Knopfdruck neu starten
 - Abwechselnd helle Felder, dezente Zielfeldmarkierung und besser erkennbare Spielobjekte
 - Responsive Oberflaeche mit grossem Editorbereich
-- Lokales Admin-Panel für Statusprüfungen, Einstellungen, Level und Beispielskripte
+- Zentraler lokaler Admin-Bereich für Status, Einstellungen, Level,
+  Beispielskripte, Level-Creator und Datensicherungen
 - Grafischer Level-Creator mit lokal gespeicherten Entwürfen und automatischer
   Übernahme in die Levelauswahl; eigene gespeicherte Level können im Creator
   oder Admin-Panel gelöscht werden; Python-Quelltextexport zusätzlich verfügbar
@@ -66,7 +79,9 @@ sind offene Entwicklungsziele; siehe [Roadmap](ROADMAP.md).
 
 Die aktuelle [Logik- und Plausibilitätsprüfung](docs/LOGIKPRUEFUNG.md) fasst
 die Testergebnisse, bestätigten Befunde und priorisierten nächsten Schritte
-zusammen. Die offene Planung steht in [ROADMAP.md](ROADMAP.md).
+zusammen. Die technische Projektplanung steht in [ROADMAP.md](ROADMAP.md);
+die separate pädagogische [Lernweg-Roadmap](docs/LERNWEG_ROADMAP.md)
+beschreibt die geplante Lernprogression.
 
 ## Optionaler Pyti Inspector
 
@@ -112,16 +127,24 @@ python -m compileall -q pyti_app tests docs *.py
 git diff --check
 ```
 
-Lernskripte werden mit normalem Python-`exec()` im Prozess ausgeführt. Pyti
-ist derzeit keine Sandbox und sollte nur mit vertrauenswürdigen Skripten
-verwendet werden. Hinweise zu Schul-Pilotierung, offenen Qualitätskriterien
-und Sicherheit stehen in der [Roadmap](ROADMAP.md).
+Lernskripte werden auf Linux in einem eingeschränkten bubblewrap-Prozess
+ausgeführt. Die Isolation ist eine zusätzliche Schutzschicht, keine
+Sicherheitszertifizierung: Bis zur unabhängigen Prüfung nur vertrauenswürdige
+Skripte ausführen. Für die Skriptausführung werden Linux, bubblewrap und
+aktivierte User Namespaces benötigt. Auf anderen Betriebssystemen bleibt die
+Skriptausführung deaktiviert.
 
 ## Voraussetzungen
 
 - Python 3.10 oder neuer
 - PySide6
-- Ein Desktop-System mit Qt-Unterstützung
+- Linux-Desktop mit Qt-Unterstützung für die Skriptausführung
+- bubblewrap (`bwrap`) und aktivierte User Namespaces
+
+Auf Debian/Ubuntu wird bubblewrap beispielsweise mit
+`sudo apt install bubblewrap` installiert. Andere Distributionen stellen es
+über ihren jeweiligen Paketmanager bereit. Auf macOS/Windows kann die
+Oberfläche gegebenenfalls starten, Skripte werden dort aber nicht ausgeführt.
 
 ## Installation
 
@@ -273,19 +296,20 @@ Headless-Start unter Linux:
 QT_QPA_PLATFORM=offscreen python main.py
 ```
 
-## Administration
+## Admin-Bereich
 
-Über `Administration` öffnet sich ein lokales Verwaltungsfenster. Es zeigt
+Über **Werkzeuge → Admin-Bereich** öffnet sich die zentrale lokale Verwaltung.
+Sie bündelt
 Prüfungen für die Spiellogik, Importe, die Erreichbarkeit aller Level, die
 Oberfläche, die gespeicherte Konfiguration und den letzten Skriptfehler.
 Außerdem lassen sich Zeitlimit und Aktionsgeschwindigkeit ändern, Level
-visuell bearbeiten sowie Beispielskripte speichern und in den Editor laden.
-Ungültige Leveländerungen, etwa ein unerreichbares Ziel, werden beim Speichern
-abgewiesen.
+visuell bearbeiten, eigene Level erstellen, Beispielskripte verwalten und
+Sicherungen exportieren oder wiederherstellen. Ungültige Leveländerungen,
+etwa ein unerreichbares Ziel, werden beim Speichern abgewiesen.
 
 Die Einstellungen werden im Benutzer-Konfigurationsordner der Plattform
 gespeichert und beim nächsten Start wieder geladen. Der Menüpunkt
-**Werkzeuge → Administration** hat absichtlich kein Passwort: Er ist für die
+**Werkzeuge → Admin-Bereich** hat absichtlich kein Passwort: Er ist für die
 Verwaltung der lokalen Installation gedacht und stellt keine
 Zugriffssicherung gegen andere Benutzer des Geräts dar. Skriptvorlagen können
 beliebigen Python-Code enthalten; auch sie sind nicht sandboxed.
@@ -298,24 +322,21 @@ timeout 2s env QT_QPA_PLATFORM=offscreen python main.py
 
 ## Sicherheitswarnung
 
-Die Anwendung verwendet in `pyti_app/script_runtime.py` `exec()`, damit
-Lernende normalen Python-Code mit den bereitgestellten Pyti-Befehlen schreiben
-koennen. Die Ausfuehrung erfolgt im Prozess der Anwendung und hat Zugriff auf
-die verfuegbaren Python-Builtins. Dadurch kann ein Skript grundsaetzlich auch
-Dateien lesen oder veraendern und Prozesse starten. Fuehre deshalb nur
-vollstaendig vertrauenswuerdige Skripte aus. Die Anwendung ist keine Sandbox
-fuer fremden oder nicht vertrauenswuerdigen Code.
+Auf Linux laeuft jedes Lernskript in einem separaten bubblewrap-Kindprozess.
+Die Isolation beschraenkt Netzwerk und Dateisystem und setzt
+Ressourcenlimits. Sie wurde noch nicht unabhaengig sicherheitsgeprueft und
+ist keine Sicherheitszertifizierung. Fuehre bis zu einer solchen Pruefung
+nur vertrauenswuerdige Skripte aus. macOS und Windows werden fuer die
+Skriptausfuehrung fail-closed abgewiesen.
 
-Skripte werden standardmäßig nach 30 Sekunden Python-Ausführungszeit
-abgebrochen. Das Zeitlimit lässt sich im Admin-Panel zwischen 1 und 300
-Sekunden einstellen. Es kann lang laufende Skripte beenden, unterbricht aber
-keine einzelne blockierende Operation innerhalb einer Python-Erweiterung.
+Die Standardlaufzeit betraegt 30 Sekunden und kann im Admin-Panel zwischen
+1 und 300 Sekunden eingestellt werden. Der separate Kindprozess wird bei
+Zeitablauf oder Stopp beendet.
 
 Die Skriptausfuehrung laeuft in einem Hintergrundthread. Pyti-Befehle werden
-ueber Qt-Signale im GUI-Thread ausgefuehrt; waehrenddessen kann die Anwendung
-weiter bedient werden. Mit `Stopp` lassen sich laufende Python-Schleifen
-abbrechen. Eine einzelne blockierende Operation innerhalb einer Python-
-Erweiterung kann auch dadurch nicht unterbrochen werden.
+ueber ein begrenztes Qt-Signalprotokoll im GUI-Thread ausgefuehrt; waehrenddessen
+kann die Anwendung weiter bedient werden. Mit `Stopp` wird der isolierte
+Kindprozess beendet.
 
 ## Versionierung
 

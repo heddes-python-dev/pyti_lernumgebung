@@ -9,6 +9,8 @@ from PySide6.QtWidgets import QApplication
 from .admin_panel import AdminPanel
 from .admin_store import AdminStore
 from .app_controller import PytiController
+from .beginner_mission import zeige_erste_mission
+from .level_creator_data import LevelEntwurfSpeicher
 from .field_manager import SpielfeldManager
 from .level_generator import GRID_SIZE
 from .level_creator_dialog import LevelCreatorDialog
@@ -53,21 +55,11 @@ def hauptprogramm():
     controller.admin_settings = settings
     controller.admin_scripts = scripts
     version = (basis_pfad / "VERSION").read_text(encoding="utf-8").strip()
-    widgets.about_action.triggered.connect(
-        lambda: erstelle_projektinfo_dialog(widgets.window, version).exec()
-    )
-    widgets.admin_action.triggered.connect(
-        lambda: AdminPanel(
-            store, controller, controller.admin_settings,
-            controller.admin_scripts,
-            version,
-            store.load_error,
-            custom_store,
-        ).exec()
-    )
     draft_path = config_pfad.parent / "level_creator_drafts.json"
-    widgets.creator_action.triggered.connect(
-        lambda: LevelCreatorDialog(
+    draft_store = LevelEntwurfSpeicher(draft_path)
+
+    def open_level_creator():
+        LevelCreatorDialog(
             draft_path,
             lambda name, level: register_custom_level(
                 controller.levels, widgets.level_liste, name, level, custom_store
@@ -78,6 +70,26 @@ def hauptprogramm():
                 controller.levels, widgets.level_liste, name, custom_store
             ),
         ).exec()
+
+    widgets.about_action.triggered.connect(
+        lambda: erstelle_projektinfo_dialog(widgets.window, version).exec()
+    )
+    widgets.first_mission_action.triggered.connect(
+        lambda: zeige_erste_mission(widgets.window, widgets, controller.levels)
+    )
+    widgets.admin_action.triggered.connect(
+        lambda: AdminPanel(
+            store, controller, controller.admin_settings,
+            controller.admin_scripts,
+            version,
+            store.load_error,
+            custom_store,
+            draft_store,
+            open_level_creator,
+        ).exec()
+    )
+    widgets.creator_action.triggered.connect(
+        open_level_creator
     )
     widgets.spielfeld_view.setScene(field.scene)
     widgets.spielfeld_view.spielfeld_manager = field

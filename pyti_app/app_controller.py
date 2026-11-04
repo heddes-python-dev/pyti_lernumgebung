@@ -49,14 +49,10 @@ class PytiController:
         self.worker = None
         self.ui_handler = None
         self.controls = [
-            widgets.level_liste,
-            widgets.reset_button,
-            widgets.editor,
-            widgets.spielfeld_view,
-            widgets.examples_action,
-            widgets.admin_action,
-            widgets.creator_action,
-            widgets.about_action,
+            widgets.level_liste, widgets.reset_button, widgets.editor,
+            widgets.spielfeld_view, widgets.examples_action,
+            widgets.admin_action, widgets.creator_action,
+            widgets.first_mission_action, widgets.about_action,
         ]
         if widgets.start_button is not None:
             self.controls.append(widgets.start_button)
@@ -120,14 +116,20 @@ class PytiController:
 
     def _on_script_finished(self, success, cancelled):
         if success:
-            self.ui.editor.clear()
             current = self.ui.level_liste.currentItem()
             data = self.levels[current.text()] if current else None
             if data and self.field.ziel_erreicht(self.robot, data.get("goal")):
                 self.ui.mission.setText(
                     self.ui.mission.text() + "<br><b>Geschafft! Ziel erreicht.</b>"
                 )
-            self.ui.status.setText("Skript erfolgreich beendet.")
+                self.ui.status.setText(
+                    "Skript erfolgreich beendet. Ziel erreicht!"
+                )
+            else:
+                self.ui.status.setText(
+                    "Skript ausgeführt. Ziel noch nicht erreicht. "
+                    "Code bleibt im Editor."
+                )
         elif cancelled:
             self.ui.status.setText("Skriptausführung abgebrochen.")
             self.ui.status.setToolTip("")

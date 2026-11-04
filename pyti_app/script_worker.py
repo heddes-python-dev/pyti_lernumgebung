@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 
 from PySide6.QtCore import QObject, Qt, QThread, Signal, Slot
 
+from .script_sandbox import LinuxScriptSandbox, SandboxError
 from .script_runtime import BefehlsInterpreter
 
 
@@ -67,6 +68,7 @@ class SkriptAusfuehrer(QThread):
         self.skript_text = skript_text
         self.interpreter = interpreter
         self.bruecke = bruecke
+        self.sandbox = LinuxScriptSandbox()
         self.abbruch_event = threading.Event()
 
     def abbrechen(self):
@@ -74,14 +76,30 @@ class SkriptAusfuehrer(QThread):
 
     def run(self):
         try:
-            success = self.interpreter.interpretiere_und_fuehre_aus(
+            self.interpreter.last_execution_error = ""
+            success, error = self.sandbox.execute(
                 self.skript_text,
-                ausfuehren=lambda name: self.bruecke.aufrufen(
-                    name, self.abbruch_event
-                ),
-                abbruch_event=self.abbruch_event,
+                self._aktion_ausfuehren,
+                self.interpreter.max_execution_time,
+                self.abbruch_event,
             )
+            self.interpreter.last_execution_error = error
+        except InterruptedError:
+            success = False
+        except (SandboxError, TimeoutError) as error:
+            self.interpreter.last_execution_error = str(error)
+            success = False
         except Exception as error:
             print(f"\n[FEHLER BEI DER SKRIPTAUSFÜHRUNG]: {error}")
+            self.interpreter.last_execution_error = str(error)
             success = False
         self.beendet.emit(success, self.abbruch_event.is_set())
+
+    def _aktion_ausfuehren(self, name):
+        result = self.bruecke.aufrufen(name, self.abbruch_event)
+        if name in (
+            "moveForward", "turnLeft", "turnRight", "turnAround",
+            "pickBeeper", "dropBeeper", "jump",
+        ) and self.abbruch_event.wait(self.interpreter.action_delay_ms / 1000):
+            raise InterruptedError("Skriptausfuehrung abgebrochen.")
+        return result

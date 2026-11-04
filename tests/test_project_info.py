@@ -49,18 +49,21 @@ class ProjektinfoTests(unittest.TestCase):
             )
             self.assertEqual(
                 [action.text() for action in widgets.menus[0].actions()],
-                ["Beispiele", "Administration", "Eigenes Level erstellen"],
+                ["Beispiele", "Admin-Bereich", "Eigenes Level erstellen"],
             )
             self.assertEqual(
                 [action.text() for action in widgets.menus[1].actions()],
-                ["Über Pyti"],
+                ["Erste Mission", "Über Pyti"],
             )
-            self.assertIs(widgets.about_action, widgets.menus[1].actions()[0])
+            self.assertIs(
+                widgets.first_mission_action, widgets.menus[1].actions()[0]
+            )
+            self.assertIs(widgets.about_action, widgets.menus[1].actions()[1])
             self.assertFalse(
                 any(
                     button.text() in {
-                        "Beispiele", "Administration",
-                        "Eigenes Level erstellen", "Über Pyti",
+                        "Beispiele", "Admin-Bereich",
+                        "Eigenes Level erstellen", "Erste Mission", "Über Pyti",
                     }
                     for button in widgets.window.findChildren(QPushButton)
                 )

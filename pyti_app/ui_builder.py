@@ -39,6 +39,7 @@ class PytiWidgets:
     examples_action: QAction
     admin_action: QAction
     creator_action: QAction
+    first_mission_action: QAction
     about_action: QAction
 
 

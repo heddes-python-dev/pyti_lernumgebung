@@ -1,6 +1,6 @@
 # Logik- und Plausibilitätsprüfung
 
-**Prüfdatum:** 26. Oktober 2026<br>
+**Prüfdatum:** 3. November 2026<br>
 **Prüfumfang:** Spiellogik, 100 Standardlevel, Sprungregeln,
 Skriptausführung, Admin-Konfiguration, GUI-Interaktionen und Dokumentation.
 
@@ -11,7 +11,16 @@ Level berechnet ein Regressionstest eine kürzeste Route, erzeugt daraus echte
 Pyti-Befehle, führt das Skript im Interpreter aus und prüft das Ziel. Die
 späteren 50 Level sind reproduzierbare Labyrinthe mit Wand-Sprungbarrieren;
 die Testlösungen verwenden jeweils genau die in der Mission genannte Anzahl
-an Sprüngen. Die vollständige Testsuite bestand mit **36 Tests**.
+an Sprüngen. Die vollständige Testsuite bestand beim letzten Lauf mit
+**56 Tests**.
+
+Die geführte erste Mission für die Level 0.0.1 bis 0.1.0 ist ebenfalls
+automatisiert geprüft. Das vollständige Beispiel, die einzelne Lücke und die
+Lösungen werden gegen die Interpreter-Ausführung getestet. Die erste
+Hindermission 0.0.3 erzwingt nun einen längeren Weg als eine Route ohne
+Wände. Ein zusätzlicher Test prüft die Hindernisrelevanz für die ersten 50
+Missionen, deren Beschreibung ausdrücklich ein Hindernis, einen Korridor,
+eine Abzweigung oder ein Labyrinth verspricht.
 
 `jump()` überspringt genau eine Wand und landet zwei Rasterfelder weiter.
 Das Landefeld muss frei und innerhalb des Spielfelds liegen. Ohne eine Wand
@@ -20,8 +29,8 @@ die Level-Erreichbarkeits- und Admin-Prüfungen.
 
 ## Geprüfte Fakten
 
-- `QT_QPA_PLATFORM=offscreen python -m unittest discover -s tests -v`:
-  **36 Tests bestanden**.
+- `python -m unittest discover -s tests`:
+  **56 Tests bestanden** (3. November 2026).
 - `python -m compileall -q pyti_app tests docs *.py`,
   `git diff --check` und die Prüfung der 150-Zeilen-Grenze: erfolgreich.
 - **100 von 100** Leveln haben gültige, erreichbare Ziele und werden über den
@@ -85,28 +94,64 @@ mehr nur auf die Konsole.
 Fundstellen: [`script_runtime.py`](../pyti_app/script_runtime.py) und
 [`app_controller.py`](../pyti_app/app_controller.py).
 
-### 5. Python-Skripte sind nicht isoliert
+### 5. Missionsbeschreibungen, frühe Level und Vorlagen (behoben)
 
-Lernskripte laufen mit regulären Python-Built-ins per `exec()` im Prozess der
-Anwendung. Das Zeitlimit und die Stopp-Funktion bilden keine Sandbox.
-Nicht vertrauenswürdige Skripte dürfen daher nicht als sicher behandelt
-werden. Isolation ist vor einer möglichen Ausführung fremder oder automatisch
-bezogener Programme gesondert zu planen.
+In frühen Leveln versprachen Missionsbeschreibungen Hindernisse oder Umwege,
+die die kürzeste Route nicht beeinflussten. Die Beschreibungen wurden an die
+tatsächlichen Wege angepasst; Level 0.0.3 enthält nun eine Wand auf der
+geraden Route. Das vollständige Beispiel der geführten Mission lädt jetzt
+eine komplette ausführbare Lösung inklusive `pickBeeper()`. Die
+Lückenvorlage lässt genau eine sinnvolle Aktion offen. Regressionstests
+prüfen die Hindernisrelevanz, die Vorlagen und die Ausführung der frühen
+Missionslösungen.
 
-Fundstelle: [`script_runtime.py`](../pyti_app/script_runtime.py).
+Fundstellen: [`level_specs.py`](../pyti_app/level_specs.py),
+[`beginner_mission_data.py`](../pyti_app/beginner_mission_data.py) und
+[`test_levels.py`](../tests/test_levels.py).
+
+### 6. Skriptausführung isoliert; unabhängige Freigabe offen
+
+Der GUI-Skriptstart verwendet nun einen separaten Python-Kindprozess unter
+Linux bubblewrap. Der Prozess läuft in eigenen Namespaces ohne Netzwerk,
+erhält ein temporäres Root-Dateisystem, in das nur die Python-Laufzeit und
+benötigte Systembibliotheken eingeblendet werden. Das Host-Benutzerverzeichnis
+und sonstige Host-Dateien werden nicht eingeblendet. Temporäre Dateisysteme
+sind begrenzt; CPU, Adressraum, Dateigröße, Dateideskriptoren und
+Prozessanzahl werden ebenfalls begrenzt. Pyti-Aktionen werden über ein
+begrenztes Protokoll an den GUI-Prozess weitergeleitet. Ist bubblewrap nicht
+verfügbar oder schlägt die Isolation fehl, wird kein unsicherer Fallback
+verwendet. Auf macOS und Windows ist die Ausführung deaktiviert.
+
+Automatisierte Tests prüfen einen Teil dieser Grenzen: versteckte
+versteckte Benutzerdaten, Hostdateien außerhalb der freigegebenen
+Laufzeitpfade, blockierten Netzwerkzugriff, Fehlerweitergabe und Abbruch
+einer Endlosschleife. Das beweist keine vollständige Sicherheit. Teile der
+Python-Laufzeit und Systembibliotheken bleiben lesbar; Kernel- und
+bubblewrap-Schwachstellen sowie plattformspezifische Fehlkonfigurationen
+sind nicht ausgeschlossen. Eine unabhängige Prüfung und Tests auf den
+Zielgeräten stehen noch aus; bis dahin keine Ausführung nicht
+vertrauenswürdiger Skripte oder Freigabe für Kinder auf normalen Rechnern.
+
+Fundstellen: [`script_sandbox.py`](../pyti_app/script_sandbox.py),
+[`script_sandbox_command.py`](../pyti_app/script_sandbox_command.py),
+[`sandbox_child.py`](../pyti_app/sandbox_child.py) und
+[`test_script_sandbox.py`](../tests/test_script_sandbox.py).
 
 ## Priorisierte nächste Schritte
 
-1. **P2 – Levelzustände:** Levelwechsel, Zurücksetzen und manuelle
-   Wand-/Beeperänderungen in Kombination weiter absichern.
-2. **P2 – Lernfortschritt und Editorzustand:** Abgeschlossene Level und
+1. **P2 – Lernfortschritt und Editorzustand:** Abgeschlossene Level und
    Skripttexte kontrolliert lokal speichern und Wiederherstellung testen.
-3. **P3 – Bedienbarkeit und Auslieferung:** Animationsgeschwindigkeit
+2. **P3 – Bedienbarkeit und Auslieferung:** Animationsgeschwindigkeit
    einstellbar machen und einen reproduzierbaren Start-/Installations-
    Smoke-Test für unterstützte Desktop-Umgebungen definieren.
-4. **Bedingt – Isolation:** Nur wenn Skripte aus nicht vertrauenswürdigen
-   Quellen zugelassen werden, vorab einen isolierten Ausführungsansatz
-   entwerfen und dessen Grenzen dokumentieren.
+3. **Sicherheit – unabhängige Prüfung:** Die Linux-Isolation auf den
+   vorgesehenen Schulgeräten unabhängig prüfen, adversariale Tests
+   durchführen und Systemvoraussetzungen dokumentieren. Bis dahin bleibt
+   die Freigabe gesperrt; macOS und Windows haben keinen isolierten
+   Skriptstart.
+4. **Pädagogisch – Erprobung:** Die geführte Mission und Vorlagen nach
+   geklärter Sicherheitsfreigabe mit Lernenden und pädagogischer Begleitung
+   erproben; bis dahin gelten Verständlichkeit und Wirksamkeit als offen.
 
 ## Grenzen dieser Prüfung
 

@@ -11,6 +11,10 @@ Alle bemerkenswerten Aenderungen dieses Projekts werden hier dokumentiert.
   Aktivierungszustand zurück.
 - Eigene gespeicherte Level können im Level-Creator oder Admin-Panel nach
   einer Bestätigung gelöscht werden; Standardlevel bleiben geschützt.
+- Geführte erste Mission für ausgewählte frühe Level mit vollständigem
+  Beispiel, einer Lückenvorlage, gestuften Tipps und freischaltbarer Lösung.
+- Zentraler Admin-Bereich mit Level-Creator sowie validiertem Export und
+  Wiederherstellung von Einstellungen, Leveln, Skriptvorlagen und Entwürfen.
 
 ### Verbessert
 
@@ -19,6 +23,16 @@ Alle bemerkenswerten Aenderungen dieses Projekts werden hier dokumentiert.
 - Dokumentation ergänzt die optionale Anbindung an den eigenständigen Pyti
   Inspector, ohne eine Telemetrie-Abhängigkeit in die Pyti-Anwendung
   aufzunehmen.
+- Lernweg-Roadmap, Erprobungsunterlagen und technische Statusdokumentation
+  gleichen erledigte Implementierung von noch offener Erprobung und
+  Sicherheitsfreigabe ab.
+- Frühe Levelbeschreibungen an die tatsächlichen Routen angepasst; der Weg
+  in 0.0.3 wird nun durch eine Wand blockiert und als Umweg getestet.
+- Linux-Skriptausführung in einen bubblewrap-Kindprozess mit eingeschränkten
+  Namespaces, temporärem Root-Dateisystem mit freigegebenen Laufzeitpfaden und
+  Ressourcenlimits verlagert;
+  auf anderen Betriebssystemen wird die Ausführung verweigert. Eine
+  unabhängige Sicherheitsprüfung steht noch aus.
 
 ## [1.4.0] - 2026-10-26
 

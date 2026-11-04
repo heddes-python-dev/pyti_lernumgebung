@@ -114,7 +114,10 @@ Passwörter, Tokens oder sonstigen sensiblen Daten.
 
 ## Sicherheitshinweis
 
-Pyti führt Lernskripte mit normalem Python im Anwendungsprozess aus und ist
-keine Sandbox. Führe nur Skripte aus, denen du vertraust. Melde vermutete
-Sicherheitsprobleme nicht als öffentliches Issue mit ausnutzbaren Details;
-kontaktiere zuerst die Projektverantwortlichen über GitHub.
+Auf Linux führt Pyti Lernskripte in einem bubblewrap-Prozess aus; auf anderen
+Betriebssystemen bleibt die Ausführung deaktiviert. Diese Isolation ist noch
+nicht unabhängig geprüft und stellt keine Freigabe für nicht
+vertrauenswürdigen Code dar. Führe nur Skripte aus, denen du vertraust.
+Melde vermutete Sicherheitsprobleme nicht als öffentliches Issue mit
+ausnutzbaren Details; kontaktiere zuerst die Projektverantwortlichen über
+GitHub.

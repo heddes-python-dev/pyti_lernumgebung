@@ -1,4 +1,6 @@
 import os
+import shutil
+import sys
 import unittest
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -14,6 +16,10 @@ from pyti_app.script_runtime import BefehlsInterpreter
 from pyti_app.script_worker import SkriptAusfuehrer, SkriptBruecke
 
 
+@unittest.skipUnless(
+    sys.platform.startswith("linux") and shutil.which("bwrap"),
+    "Worker execution tests require Linux and bubblewrap.",
+)
 class SkriptWorkerTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

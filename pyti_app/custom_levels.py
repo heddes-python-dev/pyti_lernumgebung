@@ -37,6 +37,16 @@ class EigeneLevelSpeicher:
     def loeschen(self, name):
         self.loeschen_mehrere([name])
 
+    def ersetzen(self, levels):
+        if not isinstance(levels, dict):
+            raise ValueError("Eigene Level müssen als Objekt vorliegen.")
+        validated = deepcopy(levels)
+        for name, level in validated.items():
+            if not isinstance(name, str) or not name.startswith(self.PREFIX):
+                raise ValueError("Es können nur eigene Level übernommen werden.")
+            AdminStore.validate_level(level)
+        self._speichern(validated)
+
     def loeschen_mehrere(self, names):
         keys = set(names)
         for key in keys:

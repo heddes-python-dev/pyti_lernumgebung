@@ -52,9 +52,16 @@ ergänzte den grafischen Level-Creator und die verständliche Fehleranzeige.
 ### Skriptausführung und Editor
 
 - `pyti_app/script_runtime.py` registriert Pyti-Befehle und führt Lernskripte
-  mit einem Zeitlimit aus.
+  mit einem Zeitlimit aus; die GUI verwendet dieses Modul nicht direkt für
+  den Skriptstart.
 - `pyti_app/script_worker.py` führt Skripte im `QThread` aus und leitet
   Spielfeldzugriffe per Qt-Signal in den GUI-Thread.
+- `pyti_app/script_sandbox.py` startet den Skriptprozess über bubblewrap;
+  `script_sandbox_command.py` baut die Linux-Namespace- und Mount-Policy,
+  `sandbox_child.py` führt Python im isolierten Kindprozess aus.
+- `pyti_app/beginner_mission.py` stellt den Dialog für die geführte erste
+  Mission bereit; `beginner_mission_data.py` erzeugt aus dem aktiven Level
+  das vollständige Beispiel, die Lückenvorlage, Tipps und Lösung.
 - `pyti_app/admin_checks.py` prüft Imports, Spiellogik, Level-Erreichbarkeit
   und UI-Elemente ohne den aktuellen Spielzustand zu verändern.
 - `pyti_app/editor.py` und `highlighter.py` implementieren Editor und
@@ -83,14 +90,16 @@ Ziel. Die Leveldatei erzeugt die Wandmuster so, dass ein Grundpfad zum Ziel frei
 bleibt und die Wandanzahl mit der Levelnummer wächst.
 
 ```python
-"Beispiel": {
-    "start_x": 0,
-    "start_y": 0,
-    "start_richtung": 1,
-    "waende": [(2, 1)],
-    "beeper": [(4, 0)],
-    "goal": {"type": "collect_beeper", "position": (4, 0)},
-    "description": "Mission: Umgehe die Wand. Ziel: Erreiche den Beeper und hebe ihn auf."
+level = {
+    "Beispiel": {
+        "start_x": 0,
+        "start_y": 0,
+        "start_richtung": 1,
+        "waende": [(2, 1)],
+        "beeper": [(4, 0)],
+        "goal": {"type": "collect_beeper", "position": (4, 0)},
+        "description": "Mission: Umgehe die Wand. Ziel: Erreiche den Beeper und hebe ihn auf."
+    }
 }
 ```
 
@@ -116,4 +125,6 @@ dafuer, dass der Editor den verfuegbaren Platz erhaelt.
 - Neue Pyti-Aktionen in `pyti_app/script_runtime.py` registrieren.
 - Neue Sensoren in `pyti_app/script_runtime.py` und
   `pyti_app/field_manager.py` implementieren.
-- Eine sichere Ausfuehrungsumgebung fuer nicht vertrauenswuerdigen Code integrieren, falls Skripte aus externen Quellen akzeptiert werden sollen. Die aktuelle `exec()`-Ausfuehrung ist keine Sandbox.
+- Die Linux-bubblewrap-Isolation unabhängig prüfen und mit adversarialen
+  Tests absichern. Auf anderen Betriebssystemen muss die Ausführung bis zu
+  einer gleichwertig geprüften Isolation deaktiviert bleiben.

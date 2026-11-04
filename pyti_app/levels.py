@@ -4,11 +4,16 @@ from .level_generator import baue_level
 from .maze_generator import baue_labyrinth
 from .level_specs import LEVEL_SPECS, level_nummer, maze_level_specs
 
+LEVEL_WALL_OVERRIDES = {3: [(2, 2)]}
+
 LEVELS = {}
 for nummer, (name, start, ziel, waende, mission) in enumerate(LEVEL_SPECS, 1):
-    LEVELS[f"{level_nummer(nummer)} {name}"] = baue_level(
+    level = baue_level(
         start, ziel, waende, nummer // 5, mission
     )
+    if nummer in LEVEL_WALL_OVERRIDES:
+        level["waende"] = LEVEL_WALL_OVERRIDES[nummer]
+    LEVELS[f"{level_nummer(nummer)} {name}"] = level
 
 for nummer, (name, groesse, spruenge, mission) in enumerate(
     maze_level_specs(), len(LEVEL_SPECS) + 1

@@ -27,8 +27,9 @@ class SettingsTab(QWidget):
         form.addRow("Pause zwischen Aktionen:", self.delay)
         layout.addLayout(form)
         warning = QLabel(
-            "Das Zeitlimit ersetzt keine sichere Sandbox. "
-            "Nur vertrauenswürdige Skripte ausführen.",
+            "Skripte laufen isoliert mit bubblewrap auf Linux. "
+            "Auf anderen Systemen wird die Ausführung verweigert. "
+            "Die Isolation ist noch nicht unabhängig sicherheitsgeprüft.",
             self,
         )
         warning.setWordWrap(True)

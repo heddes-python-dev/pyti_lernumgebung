@@ -5,7 +5,7 @@
 **Für Lernende, Lehrkräfte und Administratoren**<br>
 **Dokumentversion:** 1.0<br>
 **Anwendungsversion:** 1.4.0<br>
-**Stand:** 25. Oktober 2026
+**Stand:** 3. November 2026
 
 ---
 
@@ -27,9 +27,13 @@ Die Anleitung richtet sich an:
   aufgebaut ist und wie sie geprüft wird.
 
 Die Pyti-Lernumgebung ist eine lokale Desktop-Anwendung. Sie benötigt weder
-einen Webserver noch ein Benutzerkonto oder eine Datenbank. Sie ist ein
-praktisches Werkzeug für erste Programmieraufgaben, aber kein vollständiger
-Python-Kurs und keine sichere Ausführungsumgebung für fremde Programme.
+einen Webserver noch ein Benutzerkonto oder eine Datenbank. Die
+Skriptausführung ist derzeit für Linux mit bubblewrap vorgesehen. Die
+Isolation ist nicht unabhängig sicherheitsgeprüft und erlaubt keine
+Freigabe für unbeaufsichtigte Nutzung oder Kindertests auf normalen
+Rechnern. Auf Debian/Ubuntu lässt sich bubblewrap zum Beispiel mit
+`sudo apt install bubblewrap` installieren; andere Linux-Systeme verwenden
+ihren jeweiligen Paketmanager.
 
 ---
 
@@ -37,25 +41,30 @@ Python-Kurs und keine sichere Ausführungsumgebung für fremde Programme.
 
 ## Eine erste Mission
 
-1. Starte Pyti und wähle in der Level-Liste **„0.0.1 Der erste Beeper“**.
-2. Schreibe den folgenden Code in den Editor:
+1. Wähle ein Level von **„0.0.1 Der erste Beeper“** bis
+   **„0.1.0 Der Tunnel“** aus und öffne dann **Hilfe → Erste Mission**.
+2. Lies die Anleitung zum ausgewählten Level. Beispiel, Lückenvorlage und
+   Hilfen berücksichtigen Start, Blickrichtung und Wände dieses Levels,
+   einschließlich lokaler Anpassungen.
+3. Klicke auf **Vollständiges Beispiel laden**. Pyti lädt die passende
+   Befehlsfolge in den Editor. Bestehender Code wird nur nach Bestätigung
+   ersetzt.
+4. Überlege, wo Pyti nach dem Lauf stehen wird, und klicke auf **Start**.
+   Das Programm kann ausgeführt sein, obwohl das Levelziel noch nicht
+   erreicht ist.
+5. Lade bei Bedarf die Lückenvorlage und ergänze den markierten Befehl.
+   Sie lässt genau einen Befehl offen; bei einem Beeper direkt vor Pyti ist
+   das `pickBeeper()`.
+6. Klicke vor einem erneuten Lauf auf **Level neu starten**. Wenn Pyti den
+   Beeper aufgenommen hat, meldet Pyti, dass das Levelziel erreicht ist.
+   Dein Code bleibt im Editor und kann weiter verändert werden.
 
-   ```python
-   while not onBeeper():
-       moveForward()
-
-   pickBeeper()
-   ```
-
-3. Klicke auf **Start**.
-4. Beobachte Pyti: Der Roboter läuft, bis er auf dem Beeper steht, und hebt
-   ihn auf.
-5. Ist das Ziel erfüllt, erscheint eine Erfolgsmeldung in der Missionsanzeige.
-
-In diesem Programm bedeutet `while`, dass die eingerückten Anweisungen
-wiederholt werden. `not onBeeper()` fragt, ob Pyti **noch nicht** auf einem
-Beeper steht. Sobald der Sensor `True` meldet, endet die Schleife und
-`pickBeeper()` sammelt den Beeper ein.
+In dieser ersten Mission lernst du einzelne Anweisungen und ihre sichtbare
+Wirkung kennen. Schleifen und Sensoren werden nicht vorausgesetzt.
+Über **Hilfe → Erste Mission** kannst du auch eine Lückenvorlage laden und
+dir nacheinander Tipps anzeigen lassen. Die Lösung wird erst nach den drei
+Tipps freigeschaltet. Der Dialog zeigt an, wie viele Tipps du bereits gesehen
+hast. Du kannst immer auch eine eigene Lösung schreiben.
 
 ## Vor dem ersten Start
 
@@ -201,11 +210,11 @@ Zielprüfung erfolgreich sein.
 
 ### Administration
 
-Wähle **Werkzeuge → Administration**, um das lokale Verwaltungsfenster zu
-öffnen. Die Funktionen sind in [Kapitel 9](#9-admin-panel) ausführlich
-beschrieben. Der grafische Level-Creator steht unter **Werkzeuge → Eigenes
-Level erstellen** bereit. **Hilfe → Über Pyti** zeigt Projektinformationen
-und Sicherheitshinweise.
+Wähle **Werkzeuge → Admin-Bereich**, um die zentrale lokale Verwaltung zu
+öffnen. Dort findest du Systemstatus, Einstellungen, Levelbearbeitung,
+Beispielskripte, den Level-Creator und Datensicherung. Die Funktionen sind in
+[Kapitel 9](#9-admin-panel) ausführlich beschrieben. **Hilfe → Über Pyti**
+zeigt Projektinformationen und Sicherheitshinweise.
 
 Der optionale externe [Pyti Inspector](docs/INSPECTOR.md) kann Skriptzeilen,
 Aktionen, Sensorwerte, Variablen und Roboterzustand anzeigen. Er ist ein
@@ -536,7 +545,9 @@ geschützt. Löschungen im Admin-Panel werden erst mit **Speichern** dauerhaft
 
 ### Neue Level mit dem Level-Creator erstellen
 
-Öffne **Werkzeuge → Eigenes Level erstellen**. Der eigenständige Dialog
+Öffne **Werkzeuge → Admin-Bereich → Verwaltung → Level-Creator öffnen**.
+Alternativ ist der Creator direkt über **Werkzeuge → Eigenes Level erstellen**
+erreichbar. Der eigenständige Dialog
 enthält eine Vorschau des 15×15-Spielfelds und speichert mehrere Entwürfe
 automatisch im lokalen Anwendungskonfigurationsordner. Name und Mission
 können im Dialog bearbeitet werden.
@@ -635,14 +646,19 @@ kein dauerhaftes Fehlerprotokoll und bietet keinen interaktiven Debugger.
 
 ## Öffnen und Zweck
 
-Öffne **Werkzeuge → Administration**. Das Admin-Panel ist für die
+Öffne **Werkzeuge → Admin-Bereich**. Das Admin-Panel ist für die
 lokale Verwaltung der Lernumgebung vorgesehen. Es benötigt kein Passwort und
 ist keine Sicherheitsgrenze gegenüber anderen Benutzern des Computers.
 
 Im Admin-Panel gibt es die Bereiche **Systemstatus**,
-**Einstellungen**, **Level bearbeiten** und **Beispielskripte**. Änderungen
-werden über **Speichern** dauerhaft übernommen. **Abbrechen** verwirft noch
-nicht gespeicherte Einstellungen und Leveländerungen.
+**Einstellungen**, **Level bearbeiten**, **Beispielskripte** und
+**Verwaltung**. Unter **Verwaltung** öffnest du den Level-Creator oder
+exportierst/wiederherstellst eine Sicherung. Die Sicherung enthält
+Einstellungen, Level, Skriptvorlagen, eigene Level und Levelentwürfe.
+Wiederherstellen ersetzt diese lokalen Daten; die Anwendung fragt vor dem
+Import nach Bestätigung. Änderungen auf den übrigen Tabs werden über
+**Speichern** dauerhaft übernommen. **Abbrechen** verwirft dort noch nicht
+gespeicherte Einstellungen und Leveländerungen.
 
 ## Systemstatus
 
@@ -812,15 +828,25 @@ Editorprogramme separat, wenn du sie später wiederverwenden möchtest.
 
 # 11. Sicherheit und verantwortungsvolle Nutzung
 
-## Python-Code ist nicht eingeschränkt
+## Eingeschränkte Skriptausführung
 
-Pyti führt den Editorinhalt mit `exec()` und den verfügbaren Python-Builtins
-aus. Das ist **keine Sandbox**. Ein Skript kann grundsätzlich versuchen,
-Dateien zu lesen oder zu verändern, Netzwerkzugriffe vorzunehmen oder
-Prozesse zu starten, sofern Betriebssystem und Python-Umgebung das erlauben.
+Auf Linux führt Pyti Lernskripte in einem separaten Python-Prozess unter
+bubblewrap aus. Die isolierte Umgebung beginnt mit einem temporären
+Dateisystem; eingeblendet werden nur die Python-Laufzeit und benötigte
+Systembibliotheken. Das Host-Benutzerverzeichnis und sonstige Host-Dateien
+werden nicht eingeblendet. Das temporäre Verzeichnis ist größenbegrenzt; eigene
+Namespaces unterbinden Netzwerkzugriff, zusätzlich gelten Prozess-, CPU-,
+Speicher- und Dateigrößenlimits. Nur freigegebene Pyti-Aktionen werden über
+eine begrenzte Schnittstelle an die Anwendung weitergeleitet. Ist bubblewrap
+nicht verfügbar oder kann es die Isolation nicht aufbauen, wird das Skript
+nicht ausgeführt. Auf macOS und Windows ist die Ausführung deaktiviert.
 
-Das gilt ebenfalls für Beispielskripte aus dem Admin-Panel. Das Speichern als
-Vorlage macht Code nicht sicher.
+Diese Schutzschicht ist noch nicht unabhängig geprüft und nicht als
+Sicherheitszertifizierung oder Freigabe für fremden Code zu verstehen.
+Verwende bis zum Abschluss der unabhängigen Prüfung nur vertrauenswürdige
+Skripte. Ein Sandbox-Fehler darf nicht durch direkten `exec()`-Fallback
+umgangen werden. Beispielskripte aus dem Admin-Panel sind ebenfalls
+ausführbarer Code und müssen vor dem Start geprüft werden.
 
 ## Sichere Nutzung
 
@@ -828,11 +854,13 @@ Vorlage macht Code nicht sicher.
   hast.
 - Kopiere keine unbekannten Skripte aus Webseiten oder Nachrichten in den
   Editor.
-- Lass Lernende ihre Programme unter Aufsicht ausführen.
+- Die aktuelle Implementierung ist noch nicht für einen Kindertest auf einem
+  normalen Rechner freigegeben; Erwachsenenaufsicht ersetzt keine Isolation.
 - Verwende für den Unterricht, wenn nötig, ein separates Benutzerkonto oder
   eine entsprechend verwaltete Arbeitsumgebung.
 - Sichere wichtige Dateien unabhängig von der Pyti-Anwendung.
-- Verlasse dich nicht auf das Zeitlimit als Schutz vor schädlichem Code.
+- Verlasse dich nicht allein auf Zeit- oder Ressourcenlimits als Schutz vor
+  schädlichem Code.
 
 ## Admin-Bereich
 
@@ -843,11 +871,11 @@ Zugriffskontrolle oder Manipulationsschutz.
 
 ## Zeitlimit und blockierende Operationen
 
-Das Python-Zeitlimit prüft den Ablauf zwischen Python-Zeilen. Es kann eine
-lange Python-Schleife abbrechen, aber eine einzelne Operation, die in einer
-nativen Erweiterung blockiert, möglicherweise nicht rechtzeitig unterbrechen.
-Der Stopp-Knopf ist daher eine Bedienhilfe und keine Garantie für sofortigen
-Abbruch unter allen Umständen.
+Das Laufzeitlimit wird vom Elternprozess überwacht; zusätzlich gelten
+CPU-, Speicher-, Dateigrößen-, Prozess- und Deskriptorlimits im Kindprozess.
+Beim Stopp oder Zeitablauf beendet Pyti den isolierten Prozess. Diese Limits
+sind zusätzliche Schutzschichten, aber kein Ersatz für die noch ausstehende
+unabhängige Prüfung der Isolation.
 
 ---
 
