@@ -1,4 +1,6 @@
 import os
+import shutil
+import sys
 import unittest
 from pathlib import Path
 
@@ -37,6 +39,10 @@ class FehleranzeigeTests(unittest.TestCase):
             "ValueError (Zeile 2): kaputt",
         )
 
+    @unittest.skipUnless(
+        sys.platform.startswith("linux") and shutil.which("bwrap"),
+        "The GUI worker uses Linux bubblewrap for script execution.",
+    )
     def test_worker_fehler_erscheint_im_hauptfenster(self):
         root = Path(__file__).resolve().parents[1]
         widgets = baue_ui(root, LEVELS.keys())

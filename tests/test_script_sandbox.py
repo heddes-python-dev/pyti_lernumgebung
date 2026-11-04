@@ -18,6 +18,7 @@ class SandboxFailClosedTests(unittest.TestCase):
                 with self.assertRaises(SandboxError):
                     build_command(5)
 
+    @unittest.skipUnless(sys.platform.startswith("linux"), "Linux-only policy.")
     def test_root_wide_python_prefix_is_rejected(self):
         with patch("pyti_app.script_sandbox_command.sys.platform", "linux"):
             with patch("pyti_app.script_sandbox_command.shutil.which",

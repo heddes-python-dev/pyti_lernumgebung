@@ -19,7 +19,7 @@ class LinuxScriptSandbox:
             command,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
             bufsize=0,
             close_fds=True,
             start_new_session=True,
@@ -43,13 +43,15 @@ class LinuxScriptSandbox:
                 )
                 if not ready:
                     if process.poll() is not None:
-                        raise SandboxError(
-                            "Sandbox-Prozess wurde unerwartet beendet."
+                        raise self._unexpected_exit(
+                            process, "Sandbox-Prozess wurde unerwartet beendet"
                         )
                     continue
                 data = os.read(process.stdout.fileno(), 4096)
                 if not data:
-                    raise SandboxError("Sandbox lieferte keine Abschlussmeldung.")
+                    raise self._unexpected_exit(
+                        process, "Sandbox lieferte keine Abschlussmeldung"
+                    )
                 buffer.extend(data)
                 while b"\n" in buffer:
                     raw, _, remainder = buffer.partition(b"\n")
@@ -98,6 +100,7 @@ class LinuxScriptSandbox:
             self._stop(process)
             process.stdin.close()
             process.stdout.close()
+            process.stderr.close()
 
     @staticmethod
     def _send(process, message):
@@ -116,3 +119,12 @@ class LinuxScriptSandbox:
             except subprocess.TimeoutExpired:
                 process.kill()
                 process.wait(timeout=2)
+
+    @staticmethod
+    def _unexpected_exit(process, message):
+        process.wait()
+        detail = process.stderr.read(4096).decode(
+            "utf-8", errors="replace"
+        ).strip()
+        suffix = f": {detail}" if detail else ""
+        return SandboxError(f"{message}{suffix}.")
