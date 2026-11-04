@@ -22,6 +22,7 @@ from pyti_app.robot import Pyti
 from pyti_app.script_runtime import BefehlsInterpreter
 from pyti_app.script_worker import SkriptBruecke
 from pyti_app.ui_builder import baue_ui
+from sandbox_test_support import sandbox_unavailable_reason
 
 
 class AdminUITests(unittest.TestCase):
@@ -92,16 +93,20 @@ class AdminUITests(unittest.TestCase):
                 status_by_name = {
                     name: status for status, name, _ in statuses
                 }
-                expected_sandbox_status = (
-                    "OK" if sys.platform.startswith("linux") else "HINWEIS"
-                )
+                if sys.platform.startswith("linux"):
+                    expected_sandbox_status = (
+                        "FEHLER" if sandbox_unavailable_reason() else "OK"
+                    )
+                else:
+                    expected_sandbox_status = "HINWEIS"
                 self.assertEqual(
                     status_by_name["Skriptsandbox"], expected_sandbox_status
                 )
                 self.assertTrue(
                     all(
                         status in ("OK", "HINWEIS")
-                        for status, _, _ in statuses
+                        for status, name, _ in statuses
+                        if name != "Skriptsandbox"
                     ),
                     repr(statuses),
                 )

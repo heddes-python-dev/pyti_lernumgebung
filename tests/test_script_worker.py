@@ -14,6 +14,7 @@ from pyti_app.levels import LEVELS
 from pyti_app.robot import Pyti
 from pyti_app.script_runtime import BefehlsInterpreter
 from pyti_app.script_worker import SkriptAusfuehrer, SkriptBruecke
+from sandbox_test_support import sandbox_unavailable_reason
 
 
 @unittest.skipUnless(
@@ -23,6 +24,9 @@ from pyti_app.script_worker import SkriptAusfuehrer, SkriptBruecke
 class SkriptWorkerTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        reason = sandbox_unavailable_reason()
+        if reason:
+            raise unittest.SkipTest(reason)
         cls.app = QApplication.instance() or QApplication([])
 
     def setUp(self):

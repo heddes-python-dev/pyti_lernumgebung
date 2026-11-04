@@ -9,6 +9,7 @@ from unittest.mock import patch
 
 from pyti_app.script_sandbox import LinuxScriptSandbox
 from pyti_app.script_sandbox_command import SandboxError, build_command
+from sandbox_test_support import sandbox_unavailable_reason
 
 
 class SandboxFailClosedTests(unittest.TestCase):
@@ -33,6 +34,12 @@ class SandboxFailClosedTests(unittest.TestCase):
     "Linux and bubblewrap are required for sandbox tests.",
 )
 class LinuxScriptSandboxTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        reason = sandbox_unavailable_reason()
+        if reason:
+            raise unittest.SkipTest(reason)
+
     def setUp(self):
         self.sandbox = LinuxScriptSandbox()
 

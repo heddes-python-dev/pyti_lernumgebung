@@ -17,6 +17,7 @@ from pyti_app.robot import Pyti
 from pyti_app.script_runtime import BefehlsInterpreter
 from pyti_app.script_worker import SkriptBruecke
 from pyti_app.ui_builder import baue_ui
+from sandbox_test_support import sandbox_unavailable_reason
 
 
 class FehleranzeigeTests(unittest.TestCase):
@@ -44,6 +45,9 @@ class FehleranzeigeTests(unittest.TestCase):
         "The GUI worker uses Linux bubblewrap for script execution.",
     )
     def test_worker_fehler_erscheint_im_hauptfenster(self):
+        reason = sandbox_unavailable_reason()
+        if reason:
+            self.skipTest(reason)
         root = Path(__file__).resolve().parents[1]
         widgets = baue_ui(root, LEVELS.keys())
         robot = Pyti(grid_size=GRID_SIZE)
