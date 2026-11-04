@@ -16,12 +16,12 @@ class ProjektinfoTests(unittest.TestCase):
         cls.app = QApplication.instance() or QApplication([])
 
     def test_dialog_enthaelt_projektinfos_links_und_sicherheitshinweis(self):
-        dialog = erstelle_projektinfo_dialog(None, "1.4.0")
+        dialog = erstelle_projektinfo_dialog(None, "1.5.0")
         browser = dialog.findChild(QTextBrowser)
         self.assertIsNotNone(browser)
         content = browser.toHtml()
         for expected in (
-            "1.4.0",
+            "1.5.0",
             "Thomas Heddes",
             "19. September 2026",
             "MIT",

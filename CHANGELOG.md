@@ -4,6 +4,8 @@ Alle bemerkenswerten Aenderungen dieses Projekts werden hier dokumentiert.
 
 ## Unreleased
 
+## [1.5.0] - 2026-11-04
+
 ### Hinzugefuegt
 
 - Regressionstest: die Aktionen unter Werkzeuge und Hilfe bleiben während
@@ -15,6 +17,8 @@ Alle bemerkenswerten Aenderungen dieses Projekts werden hier dokumentiert.
   Beispiel, einer Lückenvorlage, gestuften Tipps und freischaltbarer Lösung.
 - Zentraler Admin-Bereich mit Level-Creator sowie validiertem Export und
   Wiederherstellung von Einstellungen, Leveln, Skriptvorlagen und Entwürfen.
+- CI-Matrix für Python 3.10–3.14 auf Ubuntu, macOS und Windows sowie
+  Governance-, Review- und vertrauliche Sicherheitsmeldeprozesse ergänzt.
 
 ### Verbessert
 

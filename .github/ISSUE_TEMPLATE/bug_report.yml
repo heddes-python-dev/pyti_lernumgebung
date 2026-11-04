@@ -38,7 +38,7 @@ body:
     attributes:
       label: Pyti-Version
       description: Die Versionsnummer findest du unter „Über Pyti“.
-      placeholder: Zum Beispiel 1.4.0
+      placeholder: Zum Beispiel 1.5.0
     validations:
       required: true
   - type: input
