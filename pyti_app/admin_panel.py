@@ -14,6 +14,7 @@ from .admin_panel_actions import AdminPanelActions
 from .admin_store import AdminStore
 from .admin_health_tab import HealthTab
 from .admin_level_tab import LevelEditorTab
+from .admin_tests_tab import AdminTestsTab
 from .admin_scripts_tab import ScriptsTab
 from .admin_settings_tab import SettingsTab
 from .admin_tools_tab import AdminToolsTab
@@ -53,6 +54,7 @@ class AdminPanel(AdminBackupActions, AdminPanelActions, QDialog):
             controller.levels, controller.ui, controller.interpreter,
             version, startup_error,
         )
+        self.tests = AdminTestsTab()
         self.settings = SettingsTab(settings, self)
         self.levels = LevelEditorTab(
             controller.levels,
@@ -74,6 +76,7 @@ class AdminPanel(AdminBackupActions, AdminPanelActions, QDialog):
             custom_level_store is not None and draft_store is not None
         )
         self.tabs.addTab(self.health, "Systemstatus")
+        self.tabs.addTab(self.tests, "Entwicklertests")
         self.tabs.addTab(self.settings, "Einstellungen")
         self.tabs.addTab(self.levels, "Level bearbeiten")
         self.tabs.addTab(self.scripts, "Beispielskripte")

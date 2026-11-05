@@ -30,6 +30,7 @@ class BefehlsInterpreter:
         self.max_execution_time = max_execution_time
         self.action_delay_ms = action_delay_ms
         self.last_execution_error = ""
+        self.telemetry_handler = None
 
     def aktion_ausfuehren(self, befehl):
         welt = self.spielfeld_manager

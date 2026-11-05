@@ -75,6 +75,16 @@ class SkriptAusfuehrer(QThread):
         self.abbruch_event.set()
 
     def run(self):
+        success = False
+        telemetry_active = self._emit_telemetry(
+            "session_start", message="Pyti-Skript gestartet"
+        )
+
+        def telemetry_event(event_type, **payload):
+            nonlocal telemetry_active
+            if telemetry_active:
+                telemetry_active = self._emit_telemetry(event_type, **payload)
+
         try:
             self.interpreter.last_execution_error = ""
             success, error = self.sandbox.execute(
@@ -82,18 +92,43 @@ class SkriptAusfuehrer(QThread):
                 self._aktion_ausfuehren,
                 self.interpreter.max_execution_time,
                 self.abbruch_event,
+                telemetry_event if telemetry_active else None,
             )
             self.interpreter.last_execution_error = error
         except InterruptedError:
             success = False
         except (SandboxError, TimeoutError) as error:
             self.interpreter.last_execution_error = str(error)
+            self._emit_telemetry(
+                "error", message=str(error), traceback=str(error)
+            )
             success = False
         except Exception as error:
             print(f"\n[FEHLER BEI DER SKRIPTAUSFÜHRUNG]: {error}")
             self.interpreter.last_execution_error = str(error)
+            self._emit_telemetry(
+                "error", message=str(error), traceback=str(error)
+            )
             success = False
+        if success:
+            message = "Skript erfolgreich beendet"
+        elif self.abbruch_event.is_set():
+            message = "Skript abgebrochen"
+        else:
+            message = "Skript beendet"
+        self._emit_telemetry("session_end", message=message)
         self.beendet.emit(success, self.abbruch_event.is_set())
+
+    def _emit_telemetry(self, event_type, **payload):
+        handler = getattr(self.interpreter, "telemetry_handler", None)
+        if handler is None:
+            return False
+        try:
+            return handler(event_type, **payload) is not False
+        except Exception as error:
+            print(f"\n[INSPECTOR-TELEMETRIE DEAKTIVIERT]: {error}")
+            self.interpreter.telemetry_handler = None
+            return False
 
     def _aktion_ausfuehren(self, name):
         result = self.bruecke.aufrufen(name, self.abbruch_event)

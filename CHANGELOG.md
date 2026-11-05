@@ -2,7 +2,17 @@
 
 Alle bemerkenswerten Aenderungen dieses Projekts werden hier dokumentiert.
 
-## Unreleased
+## [1.5.1] - 2026-11-05
+
+### Hinzugefuegt
+
+- Admin-Bereich zeigt die Entwicklertestfälle einzeln an und kann die
+  vollständige Testsuite im Hintergrund ausführen.
+
+### Behoben
+
+- Optionale Pyti-Inspector-Telemetrie ist wieder an den Sandbox-Ausführungspfad
+  angebunden; ohne externen Inspector-Launcher bleibt sie deaktiviert.
 
 ## [1.5.0] - 2026-11-04
 

@@ -4,8 +4,8 @@
 
 **Für Lernende, Lehrkräfte und Administratoren**<br>
 **Dokumentversion:** 1.0<br>
-**Anwendungsversion:** 1.5.0<br>
-**Stand:** 4. November 2026
+**Anwendungsversion:** 1.5.1<br>
+**Stand:** 5. November 2026
 
 ---
 
@@ -650,7 +650,7 @@ kein dauerhaftes Fehlerprotokoll und bietet keinen interaktiven Debugger.
 lokale Verwaltung der Lernumgebung vorgesehen. Es benötigt kein Passwort und
 ist keine Sicherheitsgrenze gegenüber anderen Benutzern des Computers.
 
-Im Admin-Panel gibt es die Bereiche **Systemstatus**,
+Im Admin-Panel gibt es die Bereiche **Systemstatus**, **Entwicklertests**,
 **Einstellungen**, **Level bearbeiten**, **Beispielskripte** und
 **Verwaltung**. Unter **Verwaltung** öffnest du den Level-Creator oder
 exportierst/wiederherstellst eine Sicherung. Die Sicherung enthält
@@ -671,14 +671,14 @@ Selbstprüfungen.
 | Module | Ob ausgewählte zentrale Anwendungsmodule importierbar sind. |
 | Spiellogik | Sensoren, Bewegung, Beeper-Inventar und Zielprüfung in einem kleinen isolierten Testfeld. |
 | Level | Ob alle 100 Standardlevel vorliegen, Werte gültig sind und Ziele mit Gehen oder Springen erreichbar sind. |
+| Skriptsandbox | Ob der isolierte bubblewrap-Kindprozess auf diesem System startet. |
 | Oberfläche | Ob zentrale Widgets einschließlich Admin-Knopf vorhanden sind. |
 | Konfiguration | Ob beim Programmstart eine fehlerhafte Admin-Datei festgestellt wurde. |
 | Letzter Skriptfehler | Der letzte aufgezeichnete Skriptfehler dieser Sitzung oder der Hinweis, dass keiner vorliegt. |
 
-Die Selbstprüfung ist kein vollständiger automatisierter Testlauf. Sie prüft
-eine Auswahl wichtiger Funktionen und zeigt die Erreichbarkeit der Level an.
-Sie ersetzt weder die vollständige Testsuite noch einen manuellen
-End-to-End-Test.
+Die Systemstatus-Selbstprüfung ist kein vollständiger automatisierter Testlauf.
+Sie prüft eine Auswahl wichtiger Funktionen und zeigt die Erreichbarkeit der
+Level an. Sie ersetzt keinen manuellen End-to-End-Test.
 
 Statuswerte:
 
@@ -690,6 +690,16 @@ Statuswerte:
 Nach der Korrektur eines Fehlers kannst du die Prüfung erneut ausführen. Ein
 Fehler beim letzten Skript kann weiterhin angezeigt werden, bis ein neuer
 Fehler ihn ersetzt oder die Anwendung neu gestartet wird.
+
+## Entwicklertests
+
+Der Tab **Entwicklertests** listet alle Testmethoden aus `tests/test_*.py`
+einzeln auf, ohne sie beim Öffnen des Admin-Bereichs auszuführen. Mit
+**Alle Tests ausführen** startet die vollständige `unittest`-Testsuite in einem
+separaten Hintergrundprozess. Dadurch bleibt die Pyti-Oberfläche bedienbar.
+Status und Ergebnis jedes Testfalls sowie das Laufprotokoll sind direkt im Tab
+sichtbar. In Installationen ohne mitgeliefertes `tests/`-Verzeichnis weist Pyti
+darauf hin, dass die Entwicklertests dort nicht verfügbar sind.
 
 ## Einstellungen
 
@@ -989,6 +999,9 @@ Python-Datei auf höchstens 150 Zeilen.
 | `pyti_app/admin_panel.py` | Admin-Dialog und Verbindung der Verwaltungsbereiche. |
 | `pyti_app/admin_health_tab.py` | Anzeige des Systemstatus. |
 | `pyti_app/admin_checks.py` | Import-, Spiel-, Level- und UI-Prüfungen. |
+| `pyti_app/admin_tests_tab.py` | Auflistung und Hintergrundausführung der Entwicklertests. |
+| `pyti_app/admin_test_runner.py` | Ausführung der Testsuite mit Einzelergebnissen für die Admin-Oberfläche. |
+| `pyti_app/admin_test_inventory.py` | Statische Erkennung der Testmethoden. |
 | `pyti_app/admin_store.py` | Laden, Validieren und Speichern von Einstellungen und Leveldaten. |
 | `pyti_app/admin_level_tab.py` | Formular für Änderungen an bestehenden Leveln. |
 | `pyti_app/admin_coordinates.py` | Bearbeitung von Wand- und Beeperkoordinaten. |
@@ -1177,4 +1190,4 @@ ____________________________________________________________________________
 ---
 
 **Ende des Benutzerhandbuchs**<br>
-Pyti-Lernumgebung · Anwendungsversion 1.5.0
+Pyti-Lernumgebung · Anwendungsversion 1.5.1

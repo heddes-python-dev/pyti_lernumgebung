@@ -38,14 +38,18 @@ Inspector kann nur Daten anzeigen, die der externe Adapter explizit sendet.
 
 Der Inspector lauscht lokal auf `127.0.0.1:8765` und verwendet ein
 versioniertes JSON-Lines-Protokoll. Der Adapter unterstützt Pyti durch
-temporäre In-Memory-Instrumentierung von `BefehlsInterpreter`. Ohne den
-Launcher wird kein Code in Pyti ergänzt oder ausgeführt.
+temporäre In-Memory-Instrumentierung von `BefehlsInterpreter`. Pyti leitet
+Zeilen-, Aktions- und Fehlerereignisse über seine lokale Sandbox-Brücke an
+den Adapter weiter; das Skript im isolierten Kindprozess erhält selbst keinen
+Netzwerkzugriff. Ohne den Launcher wird kein Telemetrie-Handler eingerichtet.
 
 Der lokale Listener ist nicht authentifiziert und für die Nutzung auf dem
 eigenen Rechner vorgesehen. Sende keine Passwörter, Tokens oder persönlichen
-Daten über die Telemetrie. Der Inspector schafft keine Sicherheitsgrenze:
-Pyti führt Lernskripte weiterhin als normalen Python-Code aus und ist keine
-Sandbox. Starte nur Skripte, denen du vertraust.
+Daten über die Telemetrie. Der Inspector schafft keine zusätzliche
+Sicherheitsgrenze. Pyti isoliert Skripte auf Linux mit bubblewrap; auf anderen
+Betriebssystemen wird die Ausführung verweigert. Eine unabhängige
+Sicherheitsprüfung der Sandbox steht noch aus. Starte nur Skripte, denen du
+vertraust.
 
 Die eigenständige Software, der Demo-Sender, das Protokoll und die
 Installationshinweise befinden sich im separaten Projektverzeichnis

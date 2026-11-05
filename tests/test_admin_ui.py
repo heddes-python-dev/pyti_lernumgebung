@@ -68,9 +68,18 @@ class AdminUITests(unittest.TestCase):
                 self.assertEqual(
                     [panel.tabs.tabText(i) for i in range(panel.tabs.count())],
                     [
-                        "Systemstatus", "Einstellungen", "Level bearbeiten",
-                        "Beispielskripte", "Verwaltung",
+                        "Systemstatus", "Entwicklertests", "Einstellungen",
+                        "Level bearbeiten", "Beispielskripte", "Verwaltung",
                     ],
+                )
+                self.assertGreater(panel.tests.table.rowCount(), 0)
+                self.assertTrue(panel.tests.run_button.isEnabled())
+                self.assertTrue(
+                    all(
+                        panel.tests.table.item(row, 0).text()
+                        == "Noch nicht ausgeführt"
+                        for row in range(panel.tests.table.rowCount())
+                    )
                 )
                 self.assertEqual(panel.windowTitle(), "Pyti – Admin-Bereich")
                 self.assertTrue(panel.tools.creator_button.isEnabled())

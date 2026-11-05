@@ -1,6 +1,6 @@
 # Pyti Lernumgebung
 
-Aktuelle Version: **1.5.0**
+Aktuelle Version: **1.5.1**
 
 Eine lokale Lernumgebung für Python und algorithmisches Denken. In einer grafischen PySide6-Anwendung programmiert man den Roboter Pyti, navigiert durch ein 15x15-Spielfeld und löst Level mit Wänden und Beepern.
 
@@ -16,7 +16,7 @@ Das ausführliche Handbuch für Lernende und Administratoren gibt es als
 | **Idee** | Python und algorithmisches Denken durch sichtbare Aufgaben mit dem Roboter Pyti vermitteln. |
 | **Initiator und Hauptentwickler** | Thomas Heddes · [@heddes-python-dev](https://github.com/heddes-python-dev) |
 | **Öffentlicher Projektstart** | 19. September 2026; an diesem Tag wurde der erste Commit im öffentlichen Repository veröffentlicht. |
-| **Aktueller Stand** | Version 1.5.0 mit 100 Standardleveln, zentralem Admin-Bereich und Linux-Skriptsandbox |
+| **Aktueller Stand** | Version 1.5.1 mit 100 Standardleveln, Admin-System- und Entwicklertests sowie Linux-Skriptsandbox |
 | **Lizenz** | [MIT-Lizenz](LICENSE) |
 | **Quellcode und Mitarbeit** | [GitHub-Projekt](https://github.com/heddes-python-dev/pyti_lernumgebung) |
 
@@ -304,6 +304,9 @@ QT_QPA_PLATFORM=offscreen python main.py
 Sie bündelt
 Prüfungen für die Spiellogik, Importe, die Erreichbarkeit aller Level, die
 Oberfläche, die gespeicherte Konfiguration und den letzten Skriptfehler.
+Der Tab **Entwicklertests** listet die Testfälle aus `tests/` einzeln und kann
+die vollständige Suite im Hintergrund starten; Testergebnisse und Laufprotokoll
+werden im Admin-Bereich angezeigt.
 Außerdem lassen sich Zeitlimit und Aktionsgeschwindigkeit ändern, Level
 visuell bearbeiten, eigene Level erstellen, Beispielskripte verwalten und
 Sicherungen exportieren oder wiederherstellen. Ungültige Leveländerungen,

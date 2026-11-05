@@ -9,10 +9,38 @@ import traceback
 MAX_LINE = 65536
 
 
+def json_value(value, depth=0):
+    if value is None or isinstance(value, (bool, int, float, str)):
+        return value if not isinstance(value, str) or len(value) <= 500 else value[:497] + "..."
+    if depth >= 3:
+        return f"<{type(value).__name__}>"
+    if isinstance(value, (list, tuple, set)):
+        return [json_value(item, depth + 1) for item in list(value)[:100]]
+    if isinstance(value, dict):
+        return {
+            str(key)[:100]: json_value(item, depth + 1)
+            for key, item in list(value.items())[:100]
+            if isinstance(key, (str, int, float, bool))
+        }
+    return f"<{type(value).__name__}>"
+
+
+def variables(frame):
+    return {
+        name: json_value(value)
+        for name, value in list(frame.f_locals.items())[:100]
+        if not name.startswith("__") and not callable(value)
+    }
+
+
 def send(message):
     data = json.dumps(message, separators=(",", ":")).encode() + b"\n"
     if len(data) > MAX_LINE:
-        data = b'{"type":"result","ok":false,"error":"Antwort zu gross"}\n'
+        if message.get("type") in ("trace", "action"):
+            message["variables"] = {}
+            data = json.dumps(message, separators=(",", ":")).encode() + b"\n"
+        if len(data) > MAX_LINE:
+            data = b'{"type":"result","ok":false,"error":"Antwort zu gross"}\n'
     os.write(1, data)
 
 
@@ -38,7 +66,13 @@ def run():
     def invoke(command):
         nonlocal sequence
         sequence += 1
-        send({"type": "action", "id": sequence, "name": command})
+        message = {"type": "action", "id": sequence, "name": command}
+        if request.get("telemetry"):
+            frame = sys._getframe(1)
+            while frame.f_code.co_filename != "<pyti-script>":
+                frame = frame.f_back
+            message.update(line=frame.f_lineno, variables=variables(frame))
+        send(message)
         response = json.loads(channel_in.readline(MAX_LINE))
         if response.get("id") != sequence or response.get("type") != "result":
             raise RuntimeError("Ungueltige Antwort vom Pyti-Prozess.")
@@ -52,7 +86,25 @@ def run():
     }
     try:
         code = compile(request["script"], "<pyti-script>", "exec")
-        exec(code, namespace, namespace)
+
+        def trace(frame, event, _arg):
+            if frame.f_code.co_filename == "<pyti-script>":
+                if event == "line":
+                    send({
+                        "type": "trace", "line": frame.f_lineno,
+                        "variables": variables(frame),
+                    })
+                return trace
+            return None
+
+        if request.get("telemetry"):
+            sys.settrace(trace)
+            try:
+                exec(code, namespace, namespace)
+            finally:
+                sys.settrace(None)
+        else:
+            exec(code, namespace, namespace)
         send({"type": "result", "ok": True})
     except BaseException as error:
         line = next(
@@ -68,6 +120,7 @@ def run():
             "ok": False,
             "error": f"{type(error).__name__}: {str(error)[:2000]}",
             "line": line,
+            "traceback": traceback.format_exc()[-2000:],
         })
 
 

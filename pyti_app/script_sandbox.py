@@ -13,7 +13,7 @@ MAX_ACTIONS = 10000
 
 
 class LinuxScriptSandbox:
-    def execute(self, script, action, timeout, cancelled):
+    def execute(self, script, action, timeout, cancelled, telemetry=None):
         command = build_command(timeout)
         process = subprocess.Popen(
             command,
@@ -32,6 +32,7 @@ class LinuxScriptSandbox:
             self._send(process, {
                 "script": script,
                 "limits": child_limits(timeout),
+                "telemetry": telemetry is not None,
             })
             while True:
                 if cancelled.is_set():
@@ -59,7 +60,13 @@ class LinuxScriptSandbox:
                     if len(raw) > MAX_PROTOCOL_LINE:
                         raise SandboxError("Sandbox-Protokollzeile zu gross.")
                     message = json.loads(raw)
-                    if message.get("type") == "action":
+                    if message.get("type") == "trace":
+                        if telemetry and not cancelled.is_set():
+                            telemetry(
+                                "line", line=message["line"],
+                                variables=message.get("variables", {}),
+                            )
+                    elif message.get("type") == "action":
                         count += 1
                         if count > MAX_ACTIONS or message.get("id") != count:
                             raise SandboxError("Ungueltige Pyti-Aktionsfolge.")
@@ -75,6 +82,10 @@ class LinuxScriptSandbox:
                             value = action(name)
                             result = {"type": "result", "id": count,
                                       "ok": True, "value": value}
+                            if telemetry:
+                                telemetry("action", name=name, result=value,
+                                          line=message.get("line"),
+                                          variables=message.get("variables", {}))
                         except Exception as error:
                             result = {"type": "result", "id": count,
                                       "ok": False, "error": str(error)[:2000]}
@@ -82,12 +93,19 @@ class LinuxScriptSandbox:
                     elif message.get("type") == "result":
                         if message.get("ok"):
                             return True, ""
-                        error = message.get("error", "Skriptfehler")
-                        line = message.get("line")
+                        response = message
+                        error = response.get("error", "Skriptfehler")
+                        line = response.get("line")
                         location = f" (Zeile {line})" if line else ""
                         error_type, separator, detail = error.partition(": ")
-                        message = detail if separator else error
-                        return False, f"{error_type}{location}: {message}"
+                        display_message = detail if separator else error
+                        if telemetry:
+                            telemetry(
+                                "error", message=error,
+                                traceback=response.get("traceback", error),
+                                **({"line": line} if line else {}),
+                            )
+                        return False, f"{error_type}{location}: {display_message}"
                     else:
                         raise SandboxError("Ungueltige Sandbox-Antwort.")
                 if len(buffer) > MAX_PROTOCOL_LINE:

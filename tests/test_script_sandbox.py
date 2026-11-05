@@ -85,6 +85,27 @@ class LinuxScriptSandboxTests(unittest.TestCase):
         self.assertFalse(success)
         self.assertIn("ValueError (Zeile 2): bad", error)
 
+    def test_telemetry_receives_script_lines_and_actions(self):
+        events = []
+        success, error = self.sandbox.execute(
+            "steps = 0\nclear = frontClear()\nsteps += 1",
+            lambda _name: True,
+            5,
+            threading.Event(),
+            lambda event_type, **payload: events.append((event_type, payload)),
+        )
+
+        self.assertTrue(success, error)
+        line = next(
+            payload for event, payload in events
+            if event == "line" and payload["line"] == 2
+        )
+        self.assertEqual(line["variables"]["steps"], 0)
+        action = next(payload for event, payload in events if event == "action")
+        self.assertEqual(action["name"], "frontClear")
+        self.assertEqual(action["result"], True)
+        self.assertEqual(action["line"], 2)
+
     def test_timeout_terminates_an_infinite_loop(self):
         with self.assertRaises(TimeoutError):
             self.execute("while True:\n    pass", timeout=2)
