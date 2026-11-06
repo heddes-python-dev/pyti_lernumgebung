@@ -162,13 +162,17 @@ sich diese nächsten Schritte:
   freischaltbare Lösung für die ausgewählten frühen Level. Technisch
   automatisiert geprüft; pädagogische Erprobung bleibt in der
   [Lernweg-Roadmap](docs/LERNWEG_ROADMAP.md) offen.
-- [ ] **Fortschrittsspeicherung:** Abgeschlossene Level lokal (z. B. in einer
-  JSON-Datei) speichern und beim nächsten Start wiederherstellen.
-- [ ] **Lernpfad für Level:** Pro Level Lernziel, optionalen Tipp und eine
-  kurze Reflexionsfrage anzeigen. Nach erfolgreichem Abschluss einen
-  „Nächstes Level“-Weg anbieten.
-- [ ] **Geschwindigkeitsregler:** Die Animationsgeschwindigkeit von
-  beobachtend langsam bis schnell einstellbar machen.
+- [x] **Fortschrittsspeicherung:** Abgeschlossene und zuletzt ausgewählte
+  Level lokal in `progress.json` speichern und beim nächsten Start
+  wiederherstellen. Eine beschädigte Datei wird gemeldet und nicht
+  stillschweigend überschrieben.
+- [x] **Lernpfad für Level:** Lernziel, optionalen Tipp und Reflexionsfrage
+  zum gewählten Level anzeigen. Nach erfolgreichem Abschluss wird
+  „Nächstes Level“ freigeschaltet. Die Hinweise sind technische Lernhilfen,
+  nicht pädagogisch mit Lernenden validiert.
+- [x] **Geschwindigkeitsregler:** Aktionspause zwischen 0 und 2000 ms direkt
+  in der Seitenleiste einstellen; die Änderung gilt für die folgende
+  Skriptausführung.
 
 ## Editor & Usability
 

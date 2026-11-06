@@ -1,17 +1,14 @@
 """Lädt das Qt-Fenster und baut die Widgetbereiche zusammen."""
 
-from dataclasses import dataclass
-
-from PySide6.QtCore import QFile
-from PySide6.QtGui import QAction
+from PySide6.QtCore import QFile, Qt
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QListWidget,
-    QMenu,
     QMenuBar,
     QPushButton,
+    QSlider,
     QSizePolicy,
     QTextBrowser,
     QVBoxLayout,
@@ -21,26 +18,7 @@ from PySide6.QtWidgets import (
 from .editor import CodeEditor
 from .field_view import SpielfeldView
 from .ui_menus import baue_menues
-
-
-@dataclass
-class PytiWidgets:
-    window: QWidget
-    level_liste: QListWidget
-    editor: CodeEditor
-    start_button: QPushButton | None
-    reset_button: QPushButton
-    stop_button: QPushButton
-    status: QLabel
-    mission: QLabel
-    spielfeld_view: SpielfeldView
-    menu_bar: QMenuBar
-    menus: tuple[QMenu, QMenu]
-    examples_action: QAction
-    admin_action: QAction
-    creator_action: QAction
-    first_mission_action: QAction
-    about_action: QAction
+from .ui_widgets import PytiWidgets
 
 
 def lade_fenster(ui_pfad):
@@ -94,6 +72,16 @@ def baue_ui(basis_pfad, level_namen):
     reset = QPushButton("Level neu starten", seitenleiste)
     reset.setToolTip("Setzt Pyti, Wände, Beeper und Inventar im aktuellen Level zurück")
     sidebar.addWidget(reset)
+    speed_row = QHBoxLayout()
+    speed_label = QLabel(seitenleiste)
+    speed_row.addWidget(speed_label)
+    speed_slider = QSlider(Qt.Horizontal, seitenleiste)
+    speed_slider.setRange(0, 2000)
+    speed_slider.setSingleStep(50)
+    speed_slider.setPageStep(200)
+    speed_slider.setToolTip("Animationspause zwischen Pyti-Aktionen")
+    speed_row.addWidget(speed_slider, 1)
+    sidebar.addLayout(speed_row)
     editor = CodeEditor(seitenleiste)
     editor.setObjectName("input_befehl")
     editor.setMinimumHeight(365)
@@ -109,6 +97,13 @@ def baue_ui(basis_pfad, level_namen):
     stop.setEnabled(False)
     start_layout.addWidget(stop)
     sidebar.addLayout(start_layout)
+    path_controls = QHBoxLayout()
+    hint_button = QPushButton("Tipp anzeigen", seitenleiste)
+    path_controls.addWidget(hint_button)
+    next_level_button = QPushButton("Nächstes Level", seitenleiste)
+    next_level_button.setEnabled(False)
+    path_controls.addWidget(next_level_button)
+    sidebar.addLayout(path_controls)
     status = QLabel("Bereit", seitenleiste)
     status.setWordWrap(True)
     status.setMinimumHeight(40)
@@ -118,7 +113,7 @@ def baue_ui(basis_pfad, level_namen):
     feld_layout.addWidget(view, 1)
     mission = QLabel(feld_spalte)
     mission.setMinimumHeight(80)
-    mission.setMaximumHeight(130)
+    mission.setMaximumHeight(180)
     mission.setWordWrap(True)
     mission.setStyleSheet(
         "background:#f0f4f8;border:1px solid #cbd5e1;border-radius:6px;"
@@ -128,8 +123,9 @@ def baue_ui(basis_pfad, level_namen):
     haupt_layout.addWidget(feld_spalte, 1)
     haupt_layout.addWidget(seitenleiste)
     return PytiWidgets(
-        window, level_liste, editor, start_button, reset, stop, status,
-        mission, view, menu_bar, menus, *actions,
+        window, level_liste, editor, start_button, reset, stop, next_level_button,
+        hint_button, speed_slider, speed_label, status, mission, view, menu_bar,
+        menus, *actions,
     )
 
 

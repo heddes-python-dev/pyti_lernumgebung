@@ -55,6 +55,11 @@ Der Lernweg-Status und die offenen Schritte stehen in der
 - Ansteigender Schwierigkeitsgrad von ersten Bewegungen bis zu komplexen
   Sprung- und Meisterlabyrinthen
 - Automatische Prüfung, ob der Ziel-Beeper aufgenommen wurde
+- Lernfortschritt lokal speichern und beim Neustart wiederherstellen;
+  abgeschlossene Level schalten den Weg zum nächsten Level frei
+- Pro Level ein Lernziel, ein aufrufbarer Tipp und eine Reflexionsfrage
+- Animationsgeschwindigkeit während der Laufzeit zwischen schnell und
+  langsam einstellen
 - Editor mit Zeilennummern, Python-Syntax-Highlighting und Tab-Unterstuetzung
 - Optionales Beispiele-Fenster mit Inhalten aus `EXAMPLES.md`
 - Geführte erste Mission unter **Hilfe → Erste Mission** für ausgewählte

@@ -20,6 +20,7 @@ from .levels import LEVELS
 from .robot import Pyti
 from .script_runtime import BefehlsInterpreter
 from .script_worker import SkriptBruecke
+from .progress_store import ProgressStore
 from .project_info import erstelle_projektinfo_dialog
 from .ui_builder import baue_ui
 
@@ -33,6 +34,11 @@ def hauptprogramm():
         QStandardPaths.writableLocation(QStandardPaths.AppConfigLocation)
     ) / "admin.json"
     store = AdminStore(config_pfad)
+    progress_store = ProgressStore(config_pfad.parent / "progress.json")
+    try:
+        completed_levels, active_level = progress_store.load()
+    except (OSError, ValueError, TypeError):
+        completed_levels, active_level = set(), ""
     custom_store = EigeneLevelSpeicher(config_pfad.parent / "custom_levels.json")
     custom_error = ""
     try:
@@ -42,8 +48,9 @@ def hauptprogramm():
         custom_error = f"Eigene Level konnten nicht geladen werden: {error}"
     defaults = {**LEVELS, **custom_levels}
     settings, levels, scripts = store.load(defaults)
-    if custom_error:
-        store.load_error = "; ".join(filter(None, (store.load_error, custom_error)))
+    startup_error = "; ".join(filter(
+        None, (store.load_error, custom_error, progress_store.load_error)
+    ))
     widgets = baue_ui(basis_pfad, levels.keys())
     robot = Pyti(grid_size=GRID_SIZE)
     field = SpielfeldManager(grid_size=GRID_SIZE)
@@ -51,7 +58,10 @@ def hauptprogramm():
         robot, field, settings["max_execution_time"], settings["action_delay_ms"]
     )
     bridge = SkriptBruecke(interpreter)
-    controller = PytiController(widgets, levels, robot, field, interpreter, bridge)
+    controller = PytiController(
+        widgets, levels, robot, field, interpreter, bridge, progress_store,
+        completed_levels, active_level,
+    )
     controller.admin_settings = settings
     controller.admin_scripts = scripts
     version = (basis_pfad / "VERSION").read_text(encoding="utf-8").strip()
@@ -82,7 +92,7 @@ def hauptprogramm():
             store, controller, controller.admin_settings,
             controller.admin_scripts,
             version,
-            store.load_error,
+            startup_error,
             custom_store,
             draft_store,
             open_level_creator,

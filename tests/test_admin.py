@@ -2,17 +2,21 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 from PySide6.QtWidgets import QApplication
 
+from pyti_app.admin_health_tab import HealthTab
 from pyti_app.admin_scripts_tab import ScriptsTab
 from pyti_app.admin_store import AdminStore
 from pyti_app.field_manager import SpielfeldManager
+from pyti_app.level_generator import GRID_SIZE
 from pyti_app.levels import LEVELS
 from pyti_app.robot import Pyti
 from pyti_app.script_runtime import BefehlsInterpreter
+from pyti_app.ui_builder import baue_ui
 
 
 class AdminPanelTests(unittest.TestCase):
@@ -67,6 +71,31 @@ class AdminPanelTests(unittest.TestCase):
             path.unlink()
             store.load(LEVELS)
             self.assertEqual(store.load_error, "")
+
+    def test_systemcheck_button_zeigt_sichtbaren_neuen_lauf(self):
+        widgets = baue_ui(Path.cwd(), LEVELS.keys())
+        robot = Pyti(grid_size=GRID_SIZE)
+        field = SpielfeldManager(grid_size=GRID_SIZE)
+        interpreter = BefehlsInterpreter(robot, field)
+        try:
+            health = HealthTab(
+                {"broken": {"waende": 5}}, widgets, interpreter, "1.5.1", "   "
+            )
+            config_row = next(
+                row for row in range(health.table.rowCount())
+                if health.table.item(row, 1).text() == "Konfiguration"
+            )
+            self.assertEqual(health.table.item(config_row, 0).text(), "OK")
+            with patch(
+                "pyti_app.admin_health_tab.pruefe_system",
+                return_value=[("OK", "Module", "Module importierbar.")],
+            ) as check:
+                health.run_button.click()
+            self.assertEqual(check.call_count, 1)
+            self.assertEqual(health.table.item(0, 1).text(), "Module")
+            self.assertIn("Prüfung 2 abgeschlossen", health.result_summary.text())
+        finally:
+            widgets.window.close()
 
     def test_beispielvorlagen_koennen_geloescht_und_ausgewaehlt_werden(self):
         tab = ScriptsTab([

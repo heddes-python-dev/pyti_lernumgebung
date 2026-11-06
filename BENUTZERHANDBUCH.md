@@ -171,6 +171,19 @@ Mit **Level neu starten** lädst du den ausgewählten Level erneut: Pyti kehrt
 zum Startpunkt zurück, seine Richtung und das Inventar werden zurückgesetzt,
 und Wände sowie Beeper werden auf den Level-Ausgangszustand zurückgesetzt.
 
+Unter der Levelbeschreibung findest du ein Lernziel, eine Reflexionsfrage
+und deinen Abschlussfortschritt. **Tipp anzeigen** blendet einen Hinweis zum
+aktuellen Level in der Statuszeile ein. Nach einem erfolgreichen Abschluss
+wird **Nächstes Level** verfügbar. Abgeschlossene und zuletzt ausgewählte
+Level speichert Pyti lokal im Anwendungskonfigurationsordner in
+`progress.json`; beim nächsten Start wird das zuletzt ausgewählte Level
+wieder geöffnet.
+
+Mit dem Regler **Geschwindigkeit** stellst du die Pause zwischen Aktionen
+ein: 0 ms führt Aktionen ohne zusätzliche Animationspause aus, höhere Werte
+verlangsamen die sichtbare Bewegung. Die Einstellung gilt sofort und für
+weitere Skriptläufe dieser Sitzung.
+
 ### Editor
 
 Im Editor schreibst du normales Python mit den Pyti-Befehlen. Er bietet:

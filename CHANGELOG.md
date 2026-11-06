@@ -2,6 +2,14 @@
 
 Alle bemerkenswerten Aenderungen dieses Projekts werden hier dokumentiert.
 
+## Unreleased
+
+### Hinzugefuegt
+
+- Lokaler Lernfortschritt mit Wiederherstellung des zuletzt gewählten Levels,
+  Lernzielen, optionalen Leveltipps, Reflexionsfragen, einem freischaltbaren
+  Nächstes-Level-Knopf und einem Live-Regler für die Animationsgeschwindigkeit.
+
 ## [1.5.1] - 2026-11-05
 
 ### Hinzugefuegt

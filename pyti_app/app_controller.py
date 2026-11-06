@@ -1,50 +1,26 @@
 """Verbindet Levelauswahl, Benutzeroberfläche und Skriptausführung."""
 
-from PySide6.QtCore import QEvent, QObject, Qt, Slot
-
+from PySide6.QtCore import Qt
+from .learning_path_actions import LearningPathActions
+from .script_ui_handler import SkriptUIHandler
 from .script_worker import SkriptAusfuehrer
 
 
-class SkriptUIHandler(QObject):
-    def __init__(self, window, beenden, thread_beendet, abbrechen, laeuft):
-        super().__init__(window)
-        self._beenden = beenden
-        self._thread_beendet = thread_beendet
-        self._abbrechen = abbrechen
-        self._laeuft = laeuft
-        self._schluss_ausstehend = False
-        window.installEventFilter(self)
-
-    def eventFilter(self, watched, event):
-        if event.type() == QEvent.Close and self._laeuft():
-            self._schluss_ausstehend = True
-            self._abbrechen()
-            event.ignore()
-            return True
-        return super().eventFilter(watched, event)
-
-    @Slot(bool, bool)
-    def skript_beendet(self, erfolgreich, abgebrochen):
-        self._beenden(erfolgreich, abgebrochen)
-
-    @Slot()
-    def thread_beendet(self):
-        parent = self.parent()
-        if parent is not None:
-            parent.removeEventFilter(self)
-        self._thread_beendet()
-        if self._schluss_ausstehend and parent is not None:
-            parent.close()
-
-
-class PytiController:
-    def __init__(self, widgets, levels, robot, field, interpreter, bridge):
+class PytiController(LearningPathActions):
+    def __init__(
+        self, widgets, levels, robot, field, interpreter, bridge,
+        progress_store=None, completed_levels=(), active_level="",
+    ):
         self.ui = widgets
         self.levels = levels
         self.robot = robot
         self.field = field
         self.interpreter = interpreter
         self.bridge = bridge
+        self.progress_store = progress_store
+        self.completed_levels = set(completed_levels)
+        self.hint_text = ""
+        self.next_level_name = ""
         self.active = False
         self.worker = None
         self.ui_handler = None
@@ -53,6 +29,8 @@ class PytiController:
             widgets.spielfeld_view, widgets.examples_action,
             widgets.admin_action, widgets.creator_action,
             widgets.first_mission_action, widgets.about_action,
+            widgets.speed_slider, widgets.hint_button,
+            widgets.next_level_button,
         ]
         if widgets.start_button is not None:
             self.controls.append(widgets.start_button)
@@ -61,7 +39,16 @@ class PytiController:
             widgets.start_button.clicked.connect(self.start)
         widgets.reset_button.clicked.connect(self.reset_level)
         widgets.stop_button.clicked.connect(self.stop)
+        widgets.speed_slider.setValue(interpreter.action_delay_ms)
+        widgets.speed_slider.valueChanged.connect(self._set_speed)
+        widgets.hint_button.clicked.connect(self.show_hint)
+        widgets.next_level_button.clicked.connect(self.next_level)
+        self._set_speed(widgets.speed_slider.value())
         widgets.level_liste.setCurrentRow(0)
+        if active_level in levels:
+            item = widgets.level_liste.findItems(active_level, Qt.MatchExactly)
+            if item:
+                widgets.level_liste.setCurrentItem(item[0])
 
     def reset_level(self):
         if self.active:
@@ -73,11 +60,10 @@ class PytiController:
         if item is None:
             return
         name = item.text()
-        data = self.levels[name]
-        self.field.lade_level(data, self.robot)
-        self.ui.mission.setText(
-            f"<b>Mission ({name}):</b><br>{data.get('description', '')}"
-        )
+        self.field.lade_level(self.levels[name], self.robot)
+        self._show_level(name)
+        self._update_next_level()
+        self._save_progress(name)
         print(f"Level geladen: {name}")
 
     def start(self):
@@ -119,12 +105,17 @@ class PytiController:
             current = self.ui.level_liste.currentItem()
             data = self.levels[current.text()] if current else None
             if data and self.field.ziel_erreicht(self.robot, data.get("goal")):
+                level_name = current.text() if current else ""
+                self.completed_levels.add(level_name)
+                self._show_level(level_name)
                 self.ui.mission.setText(
                     self.ui.mission.text() + "<br><b>Geschafft! Ziel erreicht.</b>"
                 )
+                self._update_next_level()
                 self.ui.status.setText(
                     "Skript erfolgreich beendet. Ziel erreicht!"
                 )
+                self._save_progress(level_name)
             else:
                 self.ui.status.setText(
                     "Skript ausgeführt. Ziel noch nicht erreicht. "
@@ -141,6 +132,7 @@ class PytiController:
         self.ui.stop_button.setEnabled(False)
         for widget, enabled in self.previous_enabled:
             widget.setEnabled(enabled)
+        self._update_next_level()
 
     def _on_thread_finished(self):
         self.worker = None

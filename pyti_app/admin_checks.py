@@ -14,6 +14,7 @@ from .levels import LEVELS
 
 
 def pruefe_system(levels, widgets, interpreter, startup_error=""):
+    startup_error = "" if startup_error is None else str(startup_error).strip()
     results = [
         _check("Module", _check_imports),
         _check("Spiellogik", _check_gameplay),

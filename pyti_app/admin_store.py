@@ -78,12 +78,18 @@ class AdminStore:
     @staticmethod
     def _migrate_level_name(name, levels):
         prefix, _, title = name.partition(" ")
+        numbered_match = next(
+            (candidate for candidate in levels if candidate.startswith(f"{prefix} ")),
+            None,
+        )
+        if numbered_match is not None:
+            return numbered_match
         parts = prefix.split(".")
         if len(parts) == 3 and parts[:2] == ["0", "0"] and parts[2].isdigit():
             index = int(parts[2])
             if 1 <= index <= len(LEVEL_SPECS):
                 target = f"{level_nummer(index)} {LEVEL_SPECS[index - 1][0]}"
-                if target in levels and title == LEVEL_SPECS[index - 1][0]:
+                if target in levels:
                     return target
         matches = [
             candidate for candidate in levels
