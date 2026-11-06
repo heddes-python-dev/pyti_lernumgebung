@@ -8,9 +8,10 @@ Python-Datei bleibt unter 150 Zeilen. Die Anwendung arbeitet ohne Webserver
 und externe Datenbank.
 
 Der aktuelle Versionsstand steht in `VERSION`; die Release-Aenderungen werden
-im `CHANGELOG.md` gepflegt. Version 1.5.1 ergänzt Entwicklertests im Admin-Bereich
-und führt die optionale Inspector-Telemetrie über die Sandbox-Brücke.
-Version 1.5.0 ergänzt den zentralen Admin-Bereich,
+im `CHANGELOG.md` gepflegt. Version 1.6.0 ergänzt lokale Lernfortschritte,
+Level-Lernhilfen und eine einstellbare Ausführungsgeschwindigkeit.
+Version 1.5.1 ergänzt Entwicklertests im Admin-Bereich und führt die optionale
+Inspector-Telemetrie über die Sandbox-Brücke. Version 1.5.0 ergänzt den zentralen Admin-Bereich,
 Datensicherung und -wiederherstellung, den Linux-Sandbox-Prozess sowie
 Contributor-CI und Governance. Version 1.4.0 ergänzte 50 Standardlevel, die
 Sprungaktion mit Wandprüfung und reproduzierbare Labyrinthe. Version 1.3.0

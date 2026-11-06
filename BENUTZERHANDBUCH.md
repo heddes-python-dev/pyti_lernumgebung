@@ -4,8 +4,8 @@
 
 **Für Lernende, Lehrkräfte und Administratoren**<br>
 **Dokumentversion:** 1.0<br>
-**Anwendungsversion:** 1.5.1<br>
-**Stand:** 5. November 2026
+**Anwendungsversion:** 1.6.0<br>
+**Stand:** 6. November 2026
 
 ---
 
@@ -1203,4 +1203,4 @@ ____________________________________________________________________________
 ---
 
 **Ende des Benutzerhandbuchs**<br>
-Pyti-Lernumgebung · Anwendungsversion 1.5.1
+Pyti-Lernumgebung · Anwendungsversion 1.6.0

@@ -4,11 +4,20 @@ Alle bemerkenswerten Aenderungen dieses Projekts werden hier dokumentiert.
 
 ## Unreleased
 
+## [1.6.0] - 2026-11-06
+
 ### Hinzugefuegt
 
 - Lokaler Lernfortschritt mit Wiederherstellung des zuletzt gewählten Levels,
   Lernzielen, optionalen Leveltipps, Reflexionsfragen, einem freischaltbaren
   Nächstes-Level-Knopf und einem Live-Regler für die Animationsgeschwindigkeit.
+- Gameplay-Roadmap um lokale Fortschrittsspeicherung, Level-Lernhilfen und
+  einstellbare Ausführungsgeschwindigkeit erweitert.
+
+### Verbessert
+
+- Admin-Systemprüfung meldet erneute Prüfungen sichtbar und berücksichtigt
+  gespeicherte Levelnamen aus älteren Versionen.
 
 ## [1.5.1] - 2026-11-05
 
